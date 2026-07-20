@@ -1,0 +1,278 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * ONE generic component that renders any `sections[]` entry from
+ * PaperContent. The four `layout` values reproduce the four distinct
+ * arrangements the original 1552-line App.tsx hardcoded per-section
+ * (introduction/prose, science/figure-right, innovation/figure-left+dark,
+ * results/figure-below, impact/figure-left+light). Because every section in
+ * the current content is a unique (layout, tone) pair, branching on those two
+ * fields reproduces each section's original markup exactly rather than
+ * forcing a single compromise layout on sections that looked different.
+ *
+ * The figure-rendering switch below (`renderInteractiveFigure`) is the
+ * "temporary literal switch on figure.component" called out in the Phase 3
+ * plan — Phase 4's figure registry replaces it.
+ */
+import React from 'react';
+import { BookOpen } from 'lucide-react';
+import type { ProseSection as ProseSectionData, Figure } from '../content/schema';
+import {
+  SurfaceCodeDiagram,
+  TransformerDecoderDiagram,
+  PerformanceMetricDiagram,
+  type PerformanceMetricCategory,
+  type PerformanceMetricSeries,
+} from '../../components/Diagrams';
+import { QuantumComputerScene } from '../../components/QuantumScene';
+import { QuoteBlock } from './QuoteBlock';
+
+interface ProseSectionProps {
+  section: ProseSectionData;
+  figures: Figure[];
+}
+
+function renderInteractiveFigure(figure: Figure): React.ReactNode {
+  if (figure.kind !== 'interactive') {
+    // Static images and concept-map diagrams arrive in Phase 4's figure registry.
+    return null;
+  }
+  const props = figure.props ?? {};
+
+  switch (figure.component) {
+    case 'surface-code':
+      return (
+        <SurfaceCodeDiagram
+          title={figure.title}
+          description={figure.description}
+          dataLabel={String(props.dataLabel ?? '')}
+          stabilizerLabel={String(props.stabilizerLabel ?? '')}
+        />
+      );
+    case 'transformer-decoder':
+      return (
+        <TransformerDecoderDiagram
+          title={figure.title}
+          description={figure.description}
+          inputLabel={String(props.inputLabel ?? '')}
+          modelLabel={String(props.modelLabel ?? '')}
+          outputLabel={String(props.outputLabel ?? '')}
+        />
+      );
+    case 'grouped-bar':
+      return (
+        <PerformanceMetricDiagram
+          title={figure.title}
+          description={figure.description}
+          metricLabel={String(props.metricLabel ?? '')}
+          categories={Array.isArray(props.categories) ? (props.categories as PerformanceMetricCategory[]) : []}
+          series={Array.isArray(props.series) ? (props.series as PerformanceMetricSeries[]) : []}
+          valueFormat={typeof props.valueFormat === 'string' ? props.valueFormat : undefined}
+          lowerIsBetter={typeof props.lowerIsBetter === 'boolean' ? props.lowerIsBetter : undefined}
+        />
+      );
+    case 'quantum-computer-scene':
+      // QuantumComputerScene renders no title/caption of its own (unlike the
+      // other three diagrams) — the aspect-square frame + caption overlay
+      // was App.tsx's Impact-section markup, reproduced here.
+      return (
+        <div className="aspect-square bg-theme-bg/60 rounded-xl overflow-hidden relative border border-theme-border shadow-inner">
+          <QuantumComputerScene />
+          {figure.description && (
+            <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-theme-muted font-serif italic z-10 px-4 bg-theme-card/75 backdrop-blur-xs py-1 border-t border-theme-border">
+              {figure.description}
+            </div>
+          )}
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
+function Eyebrow({ section }: { section: ProseSectionData }) {
+  if (!section.eyebrow) return null;
+
+  if (section.layout === 'figure-right') {
+    return (
+      <div className="inline-flex items-center gap-2 px-3 py-1 bg-theme-bg text-theme-body text-xs font-bold tracking-widest uppercase rounded-full mb-6 border border-theme-border">
+        <BookOpen size={14} className="text-theme-accent" /> {section.eyebrow}
+      </div>
+    );
+  }
+
+  if (section.layout === 'figure-left' && section.tone === 'inverse') {
+    return (
+      <div className="inline-flex items-center gap-2 px-3 py-1 bg-stone-900 text-amber-400 text-xs font-bold tracking-widest uppercase rounded-full mb-6 border border-stone-800">
+        {section.eyebrow}
+      </div>
+    );
+  }
+
+  return (
+    <div className="inline-block mb-3 text-xs font-bold tracking-widest text-theme-muted uppercase">
+      {section.eyebrow}
+    </div>
+  );
+}
+
+function getTitleClassName(section: ProseSectionData): string {
+  if (section.layout === 'prose') {
+    return 'font-serif text-4xl mb-6 leading-tight text-theme-main';
+  }
+  if (section.layout === 'figure-right' || section.layout === 'figure-below') {
+    return 'font-serif text-4xl md:text-5xl mb-6 text-theme-main';
+  }
+  if (section.layout === 'figure-left') {
+    return section.tone === 'inverse'
+      ? 'font-serif text-4xl md:text-5xl mb-6 text-white leading-tight'
+      : 'font-serif text-4xl mb-6 text-theme-main leading-tight';
+  }
+  return 'font-serif text-4xl mb-6 text-theme-main';
+}
+
+/**
+ * Renders `section.body`, applying the dropcap treatment to the first
+ * letter of body[0] when `section.dropcap` is set. Spacing between
+ * paragraphs matches each original section: `figure-right` (science) used a
+ * literal `mb-6` on every <p> including the last, everything else used a
+ * `space-y-6` wrapper (no trailing margin) — reproduced here via the
+ * `useIndividualMargins` branch so the two aren't visually interchangeable.
+ */
+function BodyParagraphs({ section }: { section: ProseSectionData }) {
+  const textColorClass = section.tone === 'inverse' ? 'text-stone-300 font-sans' : 'text-theme-body';
+  const useIndividualMargins = section.layout === 'figure-right';
+
+  const renderParagraph = (text: string, key: number, isFirst: boolean) => {
+    const marginClass = useIndividualMargins ? 'mb-6' : undefined;
+    if (isFirst && section.dropcap) {
+      const dropcapChar = text.slice(0, 1);
+      const remainder = text.slice(1);
+      return (
+        <p key={key} className={marginClass}>
+          <span className="text-5xl float-left mr-3 mt-[-8px] font-serif text-theme-accent font-semibold">{dropcapChar}</span>
+          {remainder}
+        </p>
+      );
+    }
+    return (
+      <p key={key} className={marginClass}>{text}</p>
+    );
+  };
+
+  if (useIndividualMargins) {
+    return (
+      <div className={`text-lg ${textColorClass} leading-relaxed`}>
+        {section.body.map((paragraph, i) => renderParagraph(paragraph, i, i === 0))}
+      </div>
+    );
+  }
+
+  const wrapperClass = `text-lg ${textColorClass} leading-relaxed space-y-6${section.quote ? ' mb-8' : ''}`;
+  return (
+    <div className={wrapperClass}>
+      {section.body.map((paragraph, i) => renderParagraph(paragraph, i, i === 0))}
+    </div>
+  );
+}
+
+export const ProseSection: React.FC<ProseSectionProps> = ({ section, figures }) => {
+  const figure = section.figureId ? figures.find((f) => f.id === section.figureId) : undefined;
+  const figureElement = figure ? renderInteractiveFigure(figure) : null;
+  const hasFigure = Boolean(figureElement);
+
+  // --- prose (introduction) ---
+  if (section.layout === 'prose') {
+    return (
+      <section id={section.id} className="py-20 bg-theme-card border-b border-theme-border/40">
+        <div className="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+          <div className="md:col-span-4">
+            <Eyebrow section={section} />
+            <h2 className={getTitleClassName(section)}>{section.title}</h2>
+            <div className="w-16 h-1 bg-theme-accent mb-6"></div>
+          </div>
+          <div className="md:col-span-8">
+            <BodyParagraphs section={section} />
+            {section.quote && <QuoteBlock quote={section.quote} />}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // --- figure-right (science) ---
+  if (section.layout === 'figure-right') {
+    return (
+      <section id={section.id} className="py-20 bg-theme-card border-b border-theme-border/40">
+        <div className="container mx-auto px-6">
+          <div className={hasFigure ? 'grid grid-cols-1 lg:grid-cols-2 gap-16 items-center' : 'max-w-3xl mx-auto'}>
+            <div className={hasFigure ? '' : 'text-center md:text-left'}>
+              <Eyebrow section={section} />
+              <h2 className={getTitleClassName(section)}>{section.title}</h2>
+              <BodyParagraphs section={section} />
+              {section.quote && <QuoteBlock quote={section.quote} />}
+            </div>
+            {hasFigure && <div>{figureElement}</div>}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // --- figure-left: innovation (inverse/dark) or impact (default/light) ---
+  if (section.layout === 'figure-left') {
+    if (section.tone === 'inverse') {
+      return (
+        <section id={section.id} className="py-20 bg-stone-950 text-stone-100 overflow-hidden relative border-y border-stone-800">
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div className="w-96 h-96 rounded-full bg-stone-800 blur-[100px] absolute top-[-100px] left-[-100px]"></div>
+            <div className="w-96 h-96 rounded-full bg-amber-500/30 blur-[100px] absolute bottom-[-100px] right-[-100px]"></div>
+          </div>
+          <div className="container mx-auto px-6 relative z-10">
+            <div className={hasFigure ? 'grid grid-cols-1 lg:grid-cols-2 gap-16 items-center' : 'max-w-3xl mx-auto text-center md:text-left'}>
+              {hasFigure && <div className="order-2 lg:order-1">{figureElement}</div>}
+              <div className={`order-1 ${hasFigure ? 'lg:order-2' : ''} animate-fade-in`}>
+                <Eyebrow section={section} />
+                <h2 className={getTitleClassName(section)}>{section.title}</h2>
+                <BodyParagraphs section={section} />
+                {section.quote && <QuoteBlock quote={section.quote} />}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    return (
+      <section id={section.id} className="py-20 bg-theme-card border-t border-b border-theme-border/50">
+        <div className="container mx-auto px-6">
+          <div className={hasFigure ? 'grid grid-cols-1 md:grid-cols-12 gap-12' : 'max-w-3xl mx-auto'}>
+            {hasFigure && <div className="md:col-span-5 relative">{figureElement}</div>}
+            <div className={hasFigure ? 'md:col-span-7 flex flex-col justify-center' : 'flex flex-col justify-center text-center md:text-left'}>
+              <Eyebrow section={section} />
+              <h2 className={getTitleClassName(section)}>{section.title}</h2>
+              <BodyParagraphs section={section} />
+              {section.quote && <QuoteBlock quote={section.quote} />}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // --- figure-below (results) ---
+  return (
+    <section id={section.id} className="py-20 bg-theme-bg">
+      <div className="container mx-auto px-6">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <Eyebrow section={section} />
+          <h2 className={getTitleClassName(section)}>{section.title}</h2>
+          <BodyParagraphs section={section} />
+        </div>
+        {hasFigure && <div className="max-w-3xl mx-auto">{figureElement}</div>}
+        {section.quote && <QuoteBlock quote={section.quote} />}
+      </div>
+    </section>
+  );
+};

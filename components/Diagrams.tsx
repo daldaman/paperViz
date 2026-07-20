@@ -6,18 +6,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Cpu, BarChart2 } from 'lucide-react';
-import { PaperData } from '../src/paperData';
 
 // --- SURFACE CODE DIAGRAM ---
-interface DiagramProps {
-  paper: PaperData;
+interface SurfaceCodeDiagramProps {
+  title?: string;
+  description?: string;
+  dataLabel: string;
+  stabilizerLabel: string;
 }
 
-export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
+export const SurfaceCodeDiagram: React.FC<SurfaceCodeDiagramProps> = ({ title, dataLabel, stabilizerLabel }) => {
   // 3x3 grid of data qubits (9 total)
   // Interspersed with 4 stabilizers (checkers)
   const [errors, setErrors] = useState<number[]>([]);
-  
+
   // Map data qubit indices (0-8) to affected stabilizers (0-3)
   // Adjacency list: DataQubit Index -> Stabilizer Indices
   const adjacency: Record<number, number[]> = {
@@ -45,11 +47,11 @@ export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
 
   return (
     <div className="flex flex-col items-center p-8 bg-theme-card rounded-xl shadow-xs border border-theme-border my-8">
-      <h3 className="font-serif text-xl mb-4 text-theme-main">{paper.diagram1Title}</h3>
+      <h3 className="font-serif text-xl mb-4 text-theme-main">{title}</h3>
       <p className="text-sm text-theme-muted mb-6 text-center max-w-md">
-        Click the grey <strong>{paper.diagram1DataLabel}</strong> to inject errors. Watch the colored <strong>{paper.diagram1StabilizerLabel}</strong> light up when they detect an odd number of errors.
+        Click the grey <strong>{dataLabel}</strong> to inject errors. Watch the colored <strong>{stabilizerLabel}</strong> light up when they detect an odd number of errors.
       </p>
-      
+
       <div className="relative w-64 h-64 bg-theme-bg rounded-lg border border-theme-border p-4 flex flex-wrap justify-between content-between">
          {/* Grid Lines */}
          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-20">
@@ -96,7 +98,7 @@ export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
           <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-xs bg-blue-500"></div> Z-Check</div>
           <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-xs bg-red-500"></div> X-Check</div>
       </div>
-      
+
       <div className="mt-4 h-6 text-sm font-serif italic text-theme-body">
         {errors.length === 0 ? "System is stable." : `Detected ${activeStabilizers.length} parity violations.`}
       </div>
@@ -105,7 +107,15 @@ export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
 };
 
 // --- TRANSFORMER DECODER DIAGRAM ---
-export const TransformerDecoderDiagram: React.FC<DiagramProps> = ({ paper }) => {
+interface TransformerDecoderDiagramProps {
+  title?: string;
+  description?: string;
+  inputLabel: string;
+  modelLabel: string;
+  outputLabel: string;
+}
+
+export const TransformerDecoderDiagram: React.FC<TransformerDecoderDiagramProps> = ({ title, description, inputLabel, modelLabel, outputLabel }) => {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
@@ -117,13 +127,13 @@ export const TransformerDecoderDiagram: React.FC<DiagramProps> = ({ paper }) => 
 
   return (
     <div className="flex flex-col items-center p-8 bg-theme-bg rounded-xl border border-theme-border my-8">
-      <h3 className="font-serif text-xl mb-4 text-theme-main">{paper.diagram2Title}</h3>
+      <h3 className="font-serif text-xl mb-4 text-theme-main">{title}</h3>
       <p className="text-sm text-theme-body mb-6 text-center max-w-md">
-        {paper.diagram2Desc}
+        {description}
       </p>
 
       <div className="relative w-full max-w-lg h-56 bg-theme-card rounded-lg shadow-inner overflow-hidden mb-6 border border-theme-border flex items-center justify-center gap-8 p-4">
-        
+
         {/* Input Stage */}
         <div className="flex flex-col items-center gap-2">
             <div className={`w-16 h-16 rounded-lg border-2 flex flex-col items-center justify-center transition-colors duration-500 ${step === 0 ? 'border-theme-accent bg-theme-accent/10' : 'border-theme-border bg-theme-bg/50'}`}>
@@ -131,7 +141,7 @@ export const TransformerDecoderDiagram: React.FC<DiagramProps> = ({ paper }) => 
                     {[...Array(9)].map((_, i) => <div key={i} className={`w-2 h-2 rounded-full ${Math.random() > 0.7 ? 'bg-theme-main' : 'bg-theme-border'}`}></div>)}
                 </div>
             </div>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-theme-muted text-center max-w-[80px] truncate">{paper.diagram2InputLabel}</span>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-theme-muted text-center max-w-[80px] truncate">{inputLabel}</span>
         </div>
 
         {/* Arrows */}
@@ -148,7 +158,7 @@ export const TransformerDecoderDiagram: React.FC<DiagramProps> = ({ paper }) => 
                     </div>
                 )}
              </div>
-             <span className="text-[10px] uppercase font-bold tracking-wider text-theme-muted text-center max-w-[100px] truncate">{paper.diagram2ModelLabel}</span>
+             <span className="text-[10px] uppercase font-bold tracking-wider text-theme-muted text-center max-w-[100px] truncate">{modelLabel}</span>
         </div>
 
         {/* Arrows */}
@@ -163,7 +173,7 @@ export const TransformerDecoderDiagram: React.FC<DiagramProps> = ({ paper }) => 
                     <span className="text-2xl font-serif text-theme-muted">?</span>
                 )}
             </div>
-            <span className="text-[10px] uppercase font-bold tracking-wider text-theme-muted text-center max-w-[80px] truncate">{paper.diagram2OutputLabel}</span>
+            <span className="text-[10px] uppercase font-bold tracking-wider text-theme-muted text-center max-w-[80px] truncate">{outputLabel}</span>
         </div>
 
       </div>
@@ -178,21 +188,45 @@ export const TransformerDecoderDiagram: React.FC<DiagramProps> = ({ paper }) => 
 };
 
 // --- PERFORMANCE CHART ---
-export const PerformanceMetricDiagram: React.FC<DiagramProps> = ({ paper }) => {
-    const [distance, setDistance] = useState<3 | 5 | 11>(5);
-    
-    // Values represent Logical Error Rate (approx %).
-    // Lower is better.
-    const data = {
-        3: { mwpm: paper.lerD3Standard, alpha: paper.lerD3Ours },
-        5: { mwpm: paper.lerD5Standard, alpha: paper.lerD5Ours },
-        11: { mwpm: paper.lerD11Standard, alpha: paper.lerD11Ours } 
-    };
+export interface PerformanceMetricCategory {
+  id: string;
+  label: string;
+}
 
-    const currentData = data[distance];
+export interface PerformanceMetricSeries {
+  id: string;
+  label: string;
+  values: Record<string, number>;
+}
+
+interface PerformanceMetricDiagramProps {
+  title?: string;
+  description?: string;
+  metricLabel: string;
+  categories: PerformanceMetricCategory[];
+  series: PerformanceMetricSeries[];
+  valueFormat?: string;
+  lowerIsBetter?: boolean;
+}
+
+export const PerformanceMetricDiagram: React.FC<PerformanceMetricDiagramProps> = ({ title, description, metricLabel, categories, series }) => {
+    const safeCategories = categories ?? [];
+    const safeSeries = series ?? [];
+    const defaultCategoryId = safeCategories[Math.min(1, safeCategories.length - 1)]?.id ?? safeCategories[0]?.id;
+    const [categoryId, setCategoryId] = useState<string | undefined>(defaultCategoryId);
+
+    // The original design renders exactly two bars: a muted "standard" bar
+    // (series[0]) and an accent "ours" bar (series[1]). Guard defensively
+    // against a shorter/missing series array now that values come from JSON.
+    const standardSeries = safeSeries[0];
+    const oursSeries = safeSeries[1];
+    const activeCategoryId = categoryId ?? safeCategories[0]?.id;
+    const standardValue = (activeCategoryId && standardSeries?.values?.[activeCategoryId]) || 0;
+    const oursValue = (activeCategoryId && oursSeries?.values?.[activeCategoryId]) || 0;
+
     // Normalize to max value of current set to visually fill the chart, with some headroom
-    const maxVal = Math.max(currentData.mwpm, currentData.alpha) * 1.25;
-    
+    const maxVal = Math.max(standardValue, oursValue, 0) * 1.25 || 1;
+
     const formatValue = (val: number) => {
         if (val < 0.01) return val.toFixed(4) + '%';
         return val.toFixed(2) + '%';
@@ -201,27 +235,27 @@ export const PerformanceMetricDiagram: React.FC<DiagramProps> = ({ paper }) => {
     return (
         <div className="flex flex-col md:flex-row gap-8 items-center p-8 bg-stone-900 text-stone-100 rounded-xl my-8 border border-stone-800 shadow-lg">
             <div className="flex-1 min-w-[240px]">
-                <h3 className="font-serif text-xl mb-2 text-theme-accent">{paper.diagram3Title}</h3>
+                <h3 className="font-serif text-xl mb-2 text-theme-accent">{title}</h3>
                 <p className="text-stone-400 text-sm mb-4 leading-relaxed">
-                    {paper.diagram3Desc}
+                    {description}
                 </p>
                 <div className="flex gap-2 mt-6">
-                    {[3, 5, 11].map((d) => (
-                        <button 
-                            key={d}
-                            onClick={() => setDistance(d as any)} 
-                            className={`px-3 py-1.5 rounded-sm text-sm font-medium transition-all duration-200 border ${distance === d ? 'bg-theme-accent text-stone-900 border-theme-accent' : 'bg-transparent text-stone-400 border-stone-700 hover:border-stone-500 hover:text-stone-200'}`}
+                    {safeCategories.map((cat) => (
+                        <button
+                            key={cat.id}
+                            onClick={() => setCategoryId(cat.id)}
+                            className={`px-3 py-1.5 rounded-sm text-sm font-medium transition-all duration-200 border ${activeCategoryId === cat.id ? 'bg-theme-accent text-stone-900 border-theme-accent' : 'bg-transparent text-stone-400 border-stone-700 hover:border-stone-500 hover:text-stone-200'}`}
                         >
-                            Distance {d}
+                            {cat.label}
                         </button>
                     ))}
                 </div>
                 <div className="mt-6 font-mono text-xs text-stone-500 flex items-center gap-2">
-                    <BarChart2 size={14} className="text-theme-accent" /> 
-                    <span>{paper.diagram3MetricLabel.toUpperCase()}</span>
+                    <BarChart2 size={14} className="text-theme-accent" />
+                    <span>{(metricLabel ?? '').toUpperCase()}</span>
                 </div>
             </div>
-            
+
             <div className="relative w-64 h-72 bg-stone-800/50 rounded-xl border border-stone-700/50 p-6 flex justify-around items-end">
                 {/* Background Grid Lines */}
                 <div className="absolute inset-0 p-6 flex flex-col justify-between pointer-events-none opacity-10">
@@ -231,35 +265,35 @@ export const PerformanceMetricDiagram: React.FC<DiagramProps> = ({ paper }) => {
                    <div className="w-full h-[1px] bg-stone-400"></div>
                 </div>
 
-                {/* MWPM Bar */}
+                {/* Standard Bar */}
                 <div className="w-20 flex flex-col justify-end items-center h-full z-10">
                     <div className="flex-1 w-full flex items-end justify-center relative mb-3">
-                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-stone-400 font-bold bg-stone-900/90 py-1 px-2 rounded-sm backdrop-blur-xs border border-stone-700/50 shadow-xs">{formatValue(currentData.mwpm)}</div>
-                        <motion.div 
+                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-stone-400 font-bold bg-stone-900/90 py-1 px-2 rounded-sm backdrop-blur-xs border border-stone-700/50 shadow-xs">{formatValue(standardValue)}</div>
+                        <motion.div
                             className="w-full bg-stone-600 rounded-t-md border-t border-x border-stone-500/30"
                             initial={{ height: 0 }}
-                            animate={{ height: `${(currentData.mwpm / maxVal) * 100}%` }}
+                            animate={{ height: `${(standardValue / maxVal) * 100}%` }}
                             transition={{ type: "spring", stiffness: 80, damping: 15 }}
                         />
                     </div>
-                    <div className="h-6 flex items-center text-xs font-bold text-stone-500 uppercase tracking-wider text-center truncate max-w-[80px]" title={paper.diagram3LabelStandard}>{paper.diagram3LabelStandard}</div>
+                    <div className="h-6 flex items-center text-xs font-bold text-stone-500 uppercase tracking-wider text-center truncate max-w-[80px]" title={standardSeries?.label}>{standardSeries?.label}</div>
                 </div>
 
-                {/* AlphaQubit Bar */}
+                {/* Ours Bar */}
                 <div className="w-20 flex flex-col justify-end items-center h-full z-10">
                      <div className="flex-1 w-full flex items-end justify-center relative mb-3">
-                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-theme-accent font-bold bg-stone-900/90 py-1 px-2 rounded-sm backdrop-blur-xs border border-theme-accent/30 shadow-xs">{formatValue(currentData.alpha)}</div>
-                        <motion.div 
+                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-theme-accent font-bold bg-stone-900/90 py-1 px-2 rounded-sm backdrop-blur-xs border border-theme-accent/30 shadow-xs">{formatValue(oursValue)}</div>
+                        <motion.div
                             className="w-full bg-theme-accent rounded-t-md shadow-[0_0_20px_rgba(197,160,89,0.25)] relative overflow-hidden"
                             initial={{ height: 0 }}
-                            animate={{ height: Math.max(1, (currentData.alpha / maxVal) * 100) + '%' }}
+                            animate={{ height: Math.max(1, (oursValue / maxVal) * 100) + '%' }}
                             transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.1 }}
                         >
                            {/* Shine effect */}
                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/20"></div>
                         </motion.div>
                     </div>
-                     <div className="h-6 flex items-center text-xs font-bold text-theme-accent uppercase tracking-wider text-center truncate max-w-[80px]" title={paper.diagram3LabelOurs}>{paper.diagram3LabelOurs}</div>
+                     <div className="h-6 flex items-center text-xs font-bold text-theme-accent uppercase tracking-wider text-center truncate max-w-[80px]" title={oursSeries?.label}>{oursSeries?.label}</div>
                 </div>
             </div>
         </div>

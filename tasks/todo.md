@@ -28,10 +28,19 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - **Judgment call:** footer.blurb was kept **verbatim**, including "Created with Google AI Studio" — which is no longer literally true now that the app is a Vite/Claude-Code-built engine — because Phase 3's visual-parity regression check needs byte-identical rendered text vs. Phase 0. Flagging this phrase as a candidate for a real edit once Phase 3/5 content-editing tooling exists.
 
 ## Phase 3 — Split the 1552-line App.tsx
-- [ ] `src/sections/` (Nav, MobileMenu, Hero, generic ProseSection, QuoteBlock, AuthorsSection, Footer)
-- [ ] `src/theme/` (themes.ts, ThemeProvider, useTheme with existing URL-param parsing)
-- [ ] All hardcoded microcopy → schema fields; App.tsx becomes a ~150-line shell
-- [ ] Add `npm run typecheck` (`tsc --noEmit`)
+- [x] `src/sections/` (Nav [+ mobile menu inline], Hero, generic ProseSection, QuoteBlock, AuthorsSection, Footer)
+- [x] `src/theme/` (themes.ts, ThemeProvider, useTheme with existing URL-param parsing)
+- [x] All hardcoded microcopy → schema fields; App.tsx is now a ~150-line shell (`src/App.tsx`, 147 lines)
+- [x] Add `npm run typecheck` (`tsc --noEmit`) — already existed from Phase 2, reverified clean
+- [x] `src/customizer/CustomizerPanel.tsx` + `updateAtPath.ts` — content tab rebound to nested `PaperContent` paths
+- [x] `src/content/schema.ts`: added `ProseSectionSchema.layout` enum (`prose`/`figure-right`/`figure-left`/`figure-below`); set per-section in `papers/alphaqubit.json` (introduction→prose, science→figure-right, innovation→figure-left, results→figure-below, impact→figure-left) — innovation and impact share `figure-left` but differ by `tone`; `src/sections/ProseSection.tsx`'s top-of-file comment documents why branching on `(layout, tone)` reproduces both exactly instead of forcing one compromise ratio
+- [x] `components/Diagrams.tsx`: three diagram components take flat props instead of `paper: PaperData`; `PerformanceMetricDiagram` derives its distance switcher from `categories[]` and bars from `series[]`
+- [x] Deleted `src/paperData.ts` (confirmed zero remaining imports via grep)
+- [x] Removed Phase 2's dev-only loader log from `src/main.tsx`
+- [x] `papers/alphaqubit.json`: added `eyebrow` for introduction ("Introduction") and impact ("IMPACT") — these were hardcoded literal strings in the old JSX that Phase 2 missed capturing; needed for pixel parity now that ProseSection renders eyebrows generically
+- **Dropped controls (documented per plan):** the four per-figure show/hide toggles (Fig 1–4) — visibility is now presence in `figures[]`. Every other Content-tab input was rebound and still works.
+- **Judgment calls (see final report for detail):** Footer's link row now reuses `Nav`'s generic entries (full labels) instead of the old hardcoded shorter "Intro"/"Team" labels, to avoid hardcoding section ids in component code; `figure-left` layout branches internally on `tone` to reproduce innovation's (dark, 50/50, `lg:` breakpoint) and impact's (light, 5/7, `md:` breakpoint) genuinely different original grids exactly, rather than forcing one compromise ratio.
+- Verified live in-browser via the running dev server: all 5 sections, 4 theme presets, embed mode (`?embed=true&theme=forest`), customizer content-tab live edit, and the localStorage detect-and-clear path (seeded an old flat-shape value, confirmed the `console.info` + clear + fallback-to-JSON behavior).
 
 ## Phase 4 — Figure registry + components
 - [ ] `src/figures/registry.ts` (name → component + props schema)

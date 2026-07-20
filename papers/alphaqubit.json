@@ -15,8 +15,10 @@
       "id": "introduction",
       "navLabel": "Introduction",
       "inNav": true,
+      "eyebrow": "Introduction",
       "title": "The Noise Barrier",
       "dropcap": true,
+      "layout": "prose",
       "body": [
         "Building a large-scale quantum computer requires correcting the errors that inevitably arise in physical systems. The state of the art is the surface code, which encodes information redundantly across many physical qubits.",
         "However, interpreting the noisy signals from these codes—a task called \"decoding\"—is a massive challenge. Complex noise effects like cross-talk and leakage confuse standard algorithms. AlphaQubit uses machine learning to learn these complex error patterns directly from the quantum processor, achieving accuracy far beyond human-designed algorithms."
@@ -30,6 +32,7 @@
       "eyebrow": "THE SYSTEM",
       "title": "The Surface Code",
       "dropcap": false,
+      "layout": "figure-right",
       "body": [
         "In a surface code, \"Data Qubits\" hold the quantum information, while \"Stabilizer Qubits\" interspersed between them act as watchdogs. They measure parity checks (X and Z type) to detect errors without destroying the quantum state.",
         "When a data qubit flips, adjacent stabilizers light up. The pattern of these lights is the \"syndrome.\" The decoder's job is to look at the syndrome and guess which data qubit flipped."
@@ -43,6 +46,7 @@
       "eyebrow": "THE INNOVATION",
       "title": "Neural Decoding",
       "dropcap": false,
+      "layout": "figure-left",
       "body": [
         "Standard decoders assume simple, independent errors. Real hardware is messier. AlphaQubit treats decoding as a sequence prediction problem, using a Recurrent Transformer architecture.",
         "It ingests the history of stabilizer measurements and uses \"soft\" analog information—probabilities rather than just binary 0s and 1s—to make highly informed predictions about logical errors."
@@ -55,6 +59,7 @@
       "inNav": false,
       "title": "Outperforming the Standard",
       "dropcap": false,
+      "layout": "figure-below",
       "body": [
         "AlphaQubit was tested on Google's Sycamore processor and accurate simulations. It consistently outperforms \"Minimum-Weight Perfect Matching\" (MWPM), the industry standard, effectively making the quantum computer appear cleaner than it actually is."
       ],
@@ -65,8 +70,10 @@
       "id": "impact",
       "navLabel": "Impact",
       "inNav": true,
+      "eyebrow": "IMPACT",
       "title": "Towards Fault Tolerance",
       "dropcap": false,
+      "layout": "figure-left",
       "body": [
         "AlphaQubit maintains its advantage even as the code distance increases (up to distance 11). It handles realistic noise including cross-talk and leakage, effects that often cripple standard decoders.",
         "By learning from data directly, machine learning decoders can adapt to the unique quirks of each quantum processor, potentially reducing the hardware requirements for useful quantum computing."

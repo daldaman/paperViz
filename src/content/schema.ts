@@ -70,6 +70,10 @@ export const ProseSectionSchema = z.object({
     .enum(['default', 'inverse'])
     .default('default')
     .describe('"inverse" renders the section on a dark background for contrast'),
+  layout: z
+    .enum(['prose', 'figure-right', 'figure-left', 'figure-below'])
+    .default('prose')
+    .describe('Structural arrangement of text vs. figure within the section'),
   figureId: z.string().min(1).optional().describe('id of a figure in figures[] to render alongside this section'),
   quote: QuoteSchema.optional().describe('Optional pull-quote rendered within the section'),
 });
