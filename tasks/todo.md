@@ -9,10 +9,11 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - [x] Create `projectIndex/inventories/pvz.md` (Zone A/B format)
 
 ## Phase 1 — De-AI-Studio-ify + local Tailwind (highest visual-regression risk)
-- [ ] Remove CDN Tailwind `<script>`, inline `tailwind.config`, esm.sh import map from `index.html`
-- [ ] Install Tailwind v4 (`tailwindcss` + `@tailwindcss/vite`); `src/index.css` `@theme inline` bridge to existing CSS-var runtime theming
-- [ ] Move `index.tsx`→`src/main.tsx`, `App.tsx`→`src/App.tsx`; delete `metadata.json`, `.env.local`, GEMINI define block, dead `types.ts` interfaces; rewrite README
-- [ ] `npm install` early (watch React 19 + r3f/three ERESOLVE); commit lockfile
+- [x] Remove CDN Tailwind `<script>`, inline `tailwind.config`, esm.sh import map from `index.html`
+- [x] Install Tailwind v4 (`tailwindcss` + `@tailwindcss/vite`); `src/index.css` `@theme inline` bridge to existing CSS-var runtime theming
+- [x] Move `index.tsx`→`src/main.tsx`, `App.tsx`→`src/App.tsx`; delete `metadata.json`, `.env.local`, GEMINI define block, dead `types.ts` interfaces; rewrite README
+- [x] `npm install` early (watch React 19 + r3f/three ERESOLVE); commit lockfile
+- [x] v3→v4 default-scale audit: remapped `shadow-sm`→`shadow-xs` (9), bare `rounded`→`rounded-sm` (32), `rounded-sm`→`rounded-xs` (3), `drop-shadow-sm`→`drop-shadow-xs` (1), `backdrop-blur-sm`→`backdrop-blur-xs` (5, found via compiled-CSS check, not in original plan checklist). No bare uncolored `border` utilities found — v4 border-color compat snippet not needed. No bare `ring` utilities found — no remap needed.
 
 ## Phase 2 — Content schema + validation
 - [ ] `src/content/schema.ts`: zod `PaperContentSchema` (meta/sections/figures/authors/footer) + `ConceptMapSpec`

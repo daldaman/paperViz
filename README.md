@@ -1,20 +1,14 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# paperViz
 
-# Run and deploy your AI Studio app
+paperViz is a reusable engine that renders research papers as interactive, themable marketing sites from `papers/<slug>.json` content files. It currently ships with the AlphaQubit demo content as a regression baseline while the schema-driven content pipeline is built out. paperViz is part of the [ccProjects](../CLAUDE.md) portfolio — see that repo's `CLAUDE.md` and this project's `STATUS.md` for the current phase and roadmap.
 
-This contains everything you need to run your app locally.
+## Prerequisites
 
-View your app in AI Studio: https://ai.studio/apps/32a688ad-c6de-491b-9ea0-6fa0c8085233
+- Node.js
 
-## Run Locally
+## Commands
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- Install dependencies: `npm install`
+- Start the dev server: `npm run dev`
+- Build for production: `npm run build`
+- Preview a production build: `npm run preview`

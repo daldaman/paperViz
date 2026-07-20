@@ -4,9 +4,9 @@
 */
 
 import React, { useState, useEffect } from 'react';
-import { HeroScene, QuantumComputerScene } from './components/QuantumScene';
-import { SurfaceCodeDiagram, TransformerDecoderDiagram, PerformanceMetricDiagram } from './components/Diagrams';
-import { PaperData, defaultPaperData } from './src/paperData';
+import { HeroScene, QuantumComputerScene } from '../components/QuantumScene';
+import { SurfaceCodeDiagram, TransformerDecoderDiagram, PerformanceMetricDiagram } from '../components/Diagrams';
+import { PaperData, defaultPaperData } from './paperData';
 import { 
   ArrowDown, 
   Menu, 
@@ -98,7 +98,7 @@ export const FONTS_BODY = {
 const AuthorCard = ({ name, role, delay }: { name: string, role: string, delay: string }) => {
   return (
     <div 
-      className="flex flex-col group animate-fade-in-up items-center p-8 bg-theme-card rounded-xl border border-theme-border shadow-sm hover:shadow-md transition-all duration-300 w-full max-w-xs hover:border-theme-accent/50" 
+      className="flex flex-col group animate-fade-in-up items-center p-8 bg-theme-card rounded-xl border border-theme-border shadow-xs hover:shadow-md transition-all duration-300 w-full max-w-xs hover:border-theme-accent/50" 
       style={{ animationDelay: delay }}
     >
       <h3 className="font-serif text-2xl text-theme-main text-center mb-3">{name}</h3>
@@ -226,8 +226,8 @@ const App: React.FC = () => {
     root.style.setProperty('--color-accent', theme.accent);
     root.style.setProperty('--color-accent-muted', theme.accentMuted);
     
-    root.style.setProperty('--font-serif', FONTS_HEADING[activeFontHeadingKey]);
-    root.style.setProperty('--font-sans', FONTS_BODY[activeFontBodyKey]);
+    root.style.setProperty('--font-serif-runtime', FONTS_HEADING[activeFontHeadingKey]);
+    root.style.setProperty('--font-sans-runtime', FONTS_BODY[activeFontBodyKey]);
   }, [activeThemeKey, activeFontHeadingKey, activeFontBodyKey]);
 
   useEffect(() => {
@@ -289,7 +289,7 @@ const App: React.FC = () => {
       
       {/* Dynamic Google Sites Embed Indicator Badge */}
       {embedMode && (
-        <div className="fixed top-4 left-4 z-40 bg-theme-card/85 backdrop-blur-md border border-theme-border rounded-full py-1.5 px-3.5 shadow-sm text-[11px] font-sans flex items-center gap-2">
+        <div className="fixed top-4 left-4 z-40 bg-theme-card/85 backdrop-blur-md border border-theme-border rounded-full py-1.5 px-3.5 shadow-xs text-[11px] font-sans flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-theme-accent animate-pulse"></span>
           <span className="text-theme-main font-bold tracking-wider uppercase text-[10px]">Embedded Frame</span>
           <button 
@@ -313,10 +313,10 @@ const App: React.FC = () => {
 
       {/* Navigation (Hidden in Compact Embed Mode) */}
       {!embedMode && (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-theme-bg/95 backdrop-blur-md shadow-sm py-4 border-b border-theme-border/50' : 'bg-transparent py-6'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-theme-bg/95 backdrop-blur-md shadow-xs py-4 border-b border-theme-border/50' : 'bg-transparent py-6'}`}>
           <div className="container mx-auto px-6 flex justify-between items-center">
             <div className="flex items-center gap-4 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <div className="w-8 h-8 bg-theme-accent rounded-full flex items-center justify-center text-white font-serif font-bold text-xl shadow-sm pb-1 transition-transform hover:scale-105">{(paper.title && paper.title[0]) || 'α'}</div>
+              <div className="w-8 h-8 bg-theme-accent rounded-full flex items-center justify-center text-white font-serif font-bold text-xl shadow-xs pb-1 transition-transform hover:scale-105">{(paper.title && paper.title[0]) || 'α'}</div>
               <span className={`font-serif font-bold text-lg tracking-wide text-theme-main transition-opacity ${scrolled ? 'opacity-100' : 'opacity-0 md:opacity-100'}`}>
                 {paper.title.toUpperCase()} <span className="font-normal text-theme-muted">{paper.publishDate.split(' ').pop() || ''}</span>
               </span>
@@ -331,7 +331,7 @@ const App: React.FC = () => {
                 href={paper.doiUrl} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="px-5 py-2 bg-theme-main text-theme-bg rounded-full hover:opacity-90 transition-all shadow-sm cursor-pointer font-semibold"
+                className="px-5 py-2 bg-theme-main text-theme-bg rounded-full hover:opacity-90 transition-all shadow-xs cursor-pointer font-semibold"
               >
                 View Paper
               </a>
@@ -376,10 +376,10 @@ const App: React.FC = () => {
         />
 
         <div className="relative z-10 container mx-auto px-6 text-center">
-          <div className="inline-block mb-4 px-3 py-1 border border-theme-accent text-theme-accent text-xs tracking-[0.2em] uppercase font-bold rounded-full backdrop-blur-sm bg-theme-card/25">
+          <div className="inline-block mb-4 px-3 py-1 border border-theme-accent text-theme-accent text-xs tracking-[0.2em] uppercase font-bold rounded-full backdrop-blur-xs bg-theme-card/25">
             {paper.journal} • {paper.publishDate}
           </div>
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight mb-8 text-theme-main drop-shadow-sm">
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium leading-tight mb-8 text-theme-main drop-shadow-xs">
             {paper.title} <br/><span className="italic font-normal text-theme-muted text-2xl md:text-4xl block mt-4 font-serif">{paper.subtitle}</span>
           </h1>
           <p className="max-w-2xl mx-auto text-base md:text-lg text-theme-body font-light leading-relaxed mb-12">
@@ -389,7 +389,7 @@ const App: React.FC = () => {
           <div className="flex justify-center">
              <a href="#introduction" onClick={scrollToSection('introduction')} className="group flex flex-col items-center gap-2 text-xs font-bold text-theme-muted hover:text-theme-main transition-colors cursor-pointer">
                 <span>EXPLORE</span>
-                <span className="p-2 border border-theme-border rounded-full group-hover:border-theme-main transition-colors bg-theme-card/40 backdrop-blur-sm">
+                <span className="p-2 border border-theme-border rounded-full group-hover:border-theme-main transition-colors bg-theme-card/40 backdrop-blur-xs">
                     <ArrowDown size={14} className="text-theme-accent" />
                 </span>
              </a>
@@ -498,7 +498,7 @@ const App: React.FC = () => {
                       <div className="md:col-span-5 relative">
                           <div className="aspect-square bg-theme-bg/60 rounded-xl overflow-hidden relative border border-theme-border shadow-inner">
                               <QuantumComputerScene />
-                              <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-theme-muted font-serif italic z-10 px-4 bg-theme-card/75 backdrop-blur-sm py-1 border-t border-theme-border">
+                              <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-theme-muted font-serif italic z-10 px-4 bg-theme-card/75 backdrop-blur-xs py-1 border-t border-theme-border">
                                 Interactive Cryostat visualization
                               </div>
                           </div>
@@ -593,7 +593,7 @@ const App: React.FC = () => {
             {/* Header */}
             <div className="flex justify-between items-center pb-4 border-b border-theme-border mb-4">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded bg-theme-accent/15 text-theme-accent">
+                <div className="p-1.5 rounded-sm bg-theme-accent/15 text-theme-accent">
                   <Sliders size={16} />
                 </div>
                 <div>
@@ -745,7 +745,7 @@ const App: React.FC = () => {
                         <button
                           key={f}
                           onClick={() => setActiveFontHeadingKey(f as any)}
-                          className={`px-2.5 py-1.5 rounded border text-[11px] transition-all font-serif ${
+                          className={`px-2.5 py-1.5 rounded-sm border text-[11px] transition-all font-serif ${
                             activeFontHeadingKey === f ? 'border-theme-accent bg-theme-accent/5 text-theme-accent font-bold' : 'border-theme-border hover:bg-theme-bg/50 text-theme-body'
                           }`}
                         >
@@ -763,7 +763,7 @@ const App: React.FC = () => {
                         <button
                           key={f}
                           onClick={() => setActiveFontBodyKey(f as any)}
-                          className={`px-2.5 py-1.5 rounded border text-[11px] transition-all font-sans ${
+                          className={`px-2.5 py-1.5 rounded-sm border text-[11px] transition-all font-sans ${
                             activeFontBodyKey === f ? 'border-theme-accent bg-theme-accent/5 text-theme-accent font-bold' : 'border-theme-border hover:bg-theme-bg/50 text-theme-body'
                           }`}
                         >
@@ -777,7 +777,7 @@ const App: React.FC = () => {
                   <div className="pt-2 border-t border-theme-border flex justify-end">
                     <button 
                       onClick={handleResetStyle}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded text-theme-muted hover:text-theme-main hover:bg-theme-bg transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-sm text-theme-muted hover:text-theme-main hover:bg-theme-bg transition-colors"
                     >
                       <RefreshCw size={12} />
                       <span>Reset Styles</span>
@@ -803,7 +803,7 @@ const App: React.FC = () => {
                   <div className="flex justify-end">
                     <button 
                       onClick={resetPaperData}
-                      className="text-[10px] text-theme-muted hover:text-red-500 font-semibold flex items-center gap-1 transition-colors border border-theme-border/60 rounded px-2 py-1 bg-theme-bg/40"
+                      className="text-[10px] text-theme-muted hover:text-red-500 font-semibold flex items-center gap-1 transition-colors border border-theme-border/60 rounded-sm px-2 py-1 bg-theme-bg/40"
                     >
                       <RefreshCw size={10} />
                       Reset to AlphaQubit
@@ -1104,7 +1104,7 @@ const App: React.FC = () => {
                                 type="text" 
                                 value={paper.diagram1Title} 
                                 onChange={(e) => updatePaperField('diagram1Title', e.target.value)}
-                                className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                               />
                             </div>
                             <div>
@@ -1113,7 +1113,7 @@ const App: React.FC = () => {
                                 rows={2}
                                 value={paper.diagram1Desc} 
                                 onChange={(e) => updatePaperField('diagram1Desc', e.target.value)}
-                                className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main resize-none"
+                                className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main resize-none"
                               />
                             </div>
                             <div className="grid grid-cols-2 gap-2">
@@ -1123,7 +1123,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram1DataLabel} 
                                   onChange={(e) => updatePaperField('diagram1DataLabel', e.target.value)}
-                                  className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                               <div>
@@ -1132,7 +1132,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram1StabilizerLabel} 
                                   onChange={(e) => updatePaperField('diagram1StabilizerLabel', e.target.value)}
-                                  className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                             </div>
@@ -1159,7 +1159,7 @@ const App: React.FC = () => {
                                 type="text" 
                                 value={paper.diagram2Title} 
                                 onChange={(e) => updatePaperField('diagram2Title', e.target.value)}
-                                className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                               />
                             </div>
                             <div>
@@ -1168,7 +1168,7 @@ const App: React.FC = () => {
                                 rows={2}
                                 value={paper.diagram2Desc} 
                                 onChange={(e) => updatePaperField('diagram2Desc', e.target.value)}
-                                className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main resize-none"
+                                className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main resize-none"
                               />
                             </div>
                             <div className="grid grid-cols-3 gap-1.5">
@@ -1178,7 +1178,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram2InputLabel} 
                                   onChange={(e) => updatePaperField('diagram2InputLabel', e.target.value)}
-                                  className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                               <div>
@@ -1187,7 +1187,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram2ModelLabel} 
                                   onChange={(e) => updatePaperField('diagram2ModelLabel', e.target.value)}
-                                  className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                               <div>
@@ -1196,7 +1196,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram2OutputLabel} 
                                   onChange={(e) => updatePaperField('diagram2OutputLabel', e.target.value)}
-                                  className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                             </div>
@@ -1223,7 +1223,7 @@ const App: React.FC = () => {
                                 type="text" 
                                 value={paper.diagram3Title} 
                                 onChange={(e) => updatePaperField('diagram3Title', e.target.value)}
-                                className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                               />
                             </div>
                             <div>
@@ -1232,7 +1232,7 @@ const App: React.FC = () => {
                                 rows={2}
                                 value={paper.diagram3Desc} 
                                 onChange={(e) => updatePaperField('diagram3Desc', e.target.value)}
-                                className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main resize-none"
+                                className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main resize-none"
                               />
                             </div>
                             <div className="grid grid-cols-2 gap-2">
@@ -1242,7 +1242,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram3LabelStandard} 
                                   onChange={(e) => updatePaperField('diagram3LabelStandard', e.target.value)}
-                                  className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                               <div>
@@ -1251,7 +1251,7 @@ const App: React.FC = () => {
                                   type="text" 
                                   value={paper.diagram3LabelOurs} 
                                   onChange={(e) => updatePaperField('diagram3LabelOurs', e.target.value)}
-                                  className="w-full p-1.5 text-[11px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                                  className="w-full p-1.5 text-[11px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                                 />
                               </div>
                             </div>
@@ -1269,7 +1269,7 @@ const App: React.FC = () => {
                                     step="0.01"
                                     value={paper.lerD3Standard} 
                                     onChange={(e) => updatePaperField('lerD3Standard', parseFloat(e.target.value) || 0)}
-                                    className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-muted font-mono text-center"
+                                    className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-muted font-mono text-center"
                                     placeholder="MWPM"
                                     title="Standard LER Distance 3"
                                   />
@@ -1278,7 +1278,7 @@ const App: React.FC = () => {
                                     step="0.01"
                                     value={paper.lerD3Ours} 
                                     onChange={(e) => updatePaperField('lerD3Ours', parseFloat(e.target.value) || 0)}
-                                    className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-accent font-mono font-semibold text-center"
+                                    className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-accent font-mono font-semibold text-center"
                                     placeholder="Ours"
                                     title="Ours LER Distance 3"
                                   />
@@ -1289,7 +1289,7 @@ const App: React.FC = () => {
                                     step="0.01"
                                     value={paper.lerD5Standard} 
                                     onChange={(e) => updatePaperField('lerD5Standard', parseFloat(e.target.value) || 0)}
-                                    className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-muted font-mono text-center"
+                                    className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-muted font-mono text-center"
                                     placeholder="MWPM"
                                     title="Standard LER Distance 5"
                                   />
@@ -1298,7 +1298,7 @@ const App: React.FC = () => {
                                     step="0.01"
                                     value={paper.lerD5Ours} 
                                     onChange={(e) => updatePaperField('lerD5Ours', parseFloat(e.target.value) || 0)}
-                                    className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-accent font-mono font-semibold text-center"
+                                    className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-accent font-mono font-semibold text-center"
                                     placeholder="Ours"
                                     title="Ours LER Distance 5"
                                   />
@@ -1309,7 +1309,7 @@ const App: React.FC = () => {
                                     step="0.0001"
                                     value={paper.lerD11Standard} 
                                     onChange={(e) => updatePaperField('lerD11Standard', parseFloat(e.target.value) || 0)}
-                                    className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-muted font-mono text-center"
+                                    className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-muted font-mono text-center"
                                     placeholder="MWPM"
                                     title="Standard LER Distance 11"
                                   />
@@ -1318,7 +1318,7 @@ const App: React.FC = () => {
                                     step="0.0001"
                                     value={paper.lerD11Ours} 
                                     onChange={(e) => updatePaperField('lerD11Ours', parseFloat(e.target.value) || 0)}
-                                    className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-accent font-mono font-semibold text-center"
+                                    className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-accent font-mono font-semibold text-center"
                                     placeholder="Ours"
                                     title="Ours LER Distance 11"
                                   />
@@ -1349,7 +1349,7 @@ const App: React.FC = () => {
                     <h4 className="font-bold text-[11px] uppercase tracking-wider text-theme-muted mb-2">7. Research Contributors</h4>
                     <div className="space-y-2">
                       {paper.authors.map((auth, index) => (
-                        <div key={index} className="flex gap-1 items-center bg-theme-bg/40 p-1.5 rounded border border-theme-border/50">
+                        <div key={index} className="flex gap-1 items-center bg-theme-bg/40 p-1.5 rounded-sm border border-theme-border/50">
                           <div className="flex-1 space-y-1">
                             <input 
                               type="text" 
@@ -1359,7 +1359,7 @@ const App: React.FC = () => {
                                 newAuthors[index].name = e.target.value;
                                 updatePaperField('authors', newAuthors);
                               }}
-                              className="w-full p-1 text-[10px] rounded border border-theme-border bg-theme-bg text-theme-main"
+                              className="w-full p-1 text-[10px] rounded-sm border border-theme-border bg-theme-bg text-theme-main"
                               placeholder="Contributor Name"
                             />
                             <input 
@@ -1370,7 +1370,7 @@ const App: React.FC = () => {
                                 newAuthors[index].role = e.target.value;
                                 updatePaperField('authors', newAuthors);
                               }}
-                              className="w-full p-1 text-[9px] rounded border border-theme-border bg-theme-bg text-theme-muted"
+                              className="w-full p-1 text-[9px] rounded-sm border border-theme-border bg-theme-bg text-theme-muted"
                               placeholder="Affiliation / Role"
                             />
                           </div>
@@ -1379,7 +1379,7 @@ const App: React.FC = () => {
                               const newAuthors = paper.authors.filter((_, i) => i !== index);
                               updatePaperField('authors', newAuthors);
                             }}
-                            className="p-1.5 text-red-500 hover:bg-red-500/10 rounded transition-colors self-stretch flex items-center justify-center animate-none"
+                            className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-sm transition-colors self-stretch flex items-center justify-center animate-none"
                             title="Remove Author"
                           >
                             <X size={12} />
@@ -1402,7 +1402,7 @@ const App: React.FC = () => {
                       Export TypeScript Configuration
                     </h4>
                     <p className="text-[9px] text-theme-muted leading-relaxed mb-2">
-                      Copy this structure to overwrite the hardcoded contents in <code className="font-mono bg-theme-bg px-1 rounded">/src/paperData.ts</code> for a static deployment:
+                      Copy this structure to overwrite the hardcoded contents in <code className="font-mono bg-theme-bg px-1 rounded-sm">/src/paperData.ts</code> for a static deployment:
                     </p>
                     <div className="relative">
                       <pre className="p-2.5 bg-stone-950 text-stone-300 font-mono text-[9px] rounded-lg overflow-x-auto max-h-40 overflow-y-auto select-all leading-normal whitespace-pre-wrap">

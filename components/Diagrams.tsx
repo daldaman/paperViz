@@ -44,7 +44,7 @@ export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
   });
 
   return (
-    <div className="flex flex-col items-center p-8 bg-theme-card rounded-xl shadow-sm border border-theme-border my-8">
+    <div className="flex flex-col items-center p-8 bg-theme-card rounded-xl shadow-xs border border-theme-border my-8">
       <h3 className="font-serif text-xl mb-4 text-theme-main">{paper.diagram1Title}</h3>
       <p className="text-sm text-theme-muted mb-6 text-center max-w-md">
         Click the grey <strong>{paper.diagram1DataLabel}</strong> to inject errors. Watch the colored <strong>{paper.diagram1StabilizerLabel}</strong> light up when they detect an odd number of errors.
@@ -67,7 +67,7 @@ export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
          ].map(stab => (
              <motion.div
                 key={`stab-${stab.id}`}
-                className={`absolute w-10 h-10 -ml-5 -mt-5 flex items-center justify-center text-white text-xs font-bold rounded-sm shadow-sm transition-all duration-300 ${activeStabilizers.includes(stab.id) ? stab.color + ' opacity-100 scale-110 ring-4 ring-offset-2 ring-stone-200' : 'bg-stone-300 opacity-40'}`}
+                className={`absolute w-10 h-10 -ml-5 -mt-5 flex items-center justify-center text-white text-xs font-bold rounded-xs shadow-xs transition-all duration-300 ${activeStabilizers.includes(stab.id) ? stab.color + ' opacity-100 scale-110 ring-4 ring-offset-2 ring-stone-200' : 'bg-stone-300 opacity-40'}`}
                 style={{ left: stab.x, top: stab.y }}
              >
                  {stab.type}
@@ -93,8 +93,8 @@ export const SurfaceCodeDiagram: React.FC<DiagramProps> = ({ paper }) => {
 
       <div className="mt-6 flex items-center gap-4 text-xs font-mono text-theme-muted">
           <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-theme-main"></div> Error</div>
-          <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm bg-blue-500"></div> Z-Check</div>
-          <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm bg-red-500"></div> X-Check</div>
+          <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-xs bg-blue-500"></div> Z-Check</div>
+          <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-xs bg-red-500"></div> X-Check</div>
       </div>
       
       <div className="mt-4 h-6 text-sm font-serif italic text-theme-body">
@@ -210,7 +210,7 @@ export const PerformanceMetricDiagram: React.FC<DiagramProps> = ({ paper }) => {
                         <button 
                             key={d}
                             onClick={() => setDistance(d as any)} 
-                            className={`px-3 py-1.5 rounded text-sm font-medium transition-all duration-200 border ${distance === d ? 'bg-theme-accent text-stone-900 border-theme-accent' : 'bg-transparent text-stone-400 border-stone-700 hover:border-stone-500 hover:text-stone-200'}`}
+                            className={`px-3 py-1.5 rounded-sm text-sm font-medium transition-all duration-200 border ${distance === d ? 'bg-theme-accent text-stone-900 border-theme-accent' : 'bg-transparent text-stone-400 border-stone-700 hover:border-stone-500 hover:text-stone-200'}`}
                         >
                             Distance {d}
                         </button>
@@ -234,7 +234,7 @@ export const PerformanceMetricDiagram: React.FC<DiagramProps> = ({ paper }) => {
                 {/* MWPM Bar */}
                 <div className="w-20 flex flex-col justify-end items-center h-full z-10">
                     <div className="flex-1 w-full flex items-end justify-center relative mb-3">
-                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-stone-400 font-bold bg-stone-900/90 py-1 px-2 rounded backdrop-blur-sm border border-stone-700/50 shadow-sm">{formatValue(currentData.mwpm)}</div>
+                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-stone-400 font-bold bg-stone-900/90 py-1 px-2 rounded-sm backdrop-blur-xs border border-stone-700/50 shadow-xs">{formatValue(currentData.mwpm)}</div>
                         <motion.div 
                             className="w-full bg-stone-600 rounded-t-md border-t border-x border-stone-500/30"
                             initial={{ height: 0 }}
@@ -248,7 +248,7 @@ export const PerformanceMetricDiagram: React.FC<DiagramProps> = ({ paper }) => {
                 {/* AlphaQubit Bar */}
                 <div className="w-20 flex flex-col justify-end items-center h-full z-10">
                      <div className="flex-1 w-full flex items-end justify-center relative mb-3">
-                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-theme-accent font-bold bg-stone-900/90 py-1 px-2 rounded backdrop-blur-sm border border-theme-accent/30 shadow-sm">{formatValue(currentData.alpha)}</div>
+                        <div className="absolute -top-5 w-full text-center text-sm font-mono text-theme-accent font-bold bg-stone-900/90 py-1 px-2 rounded-sm backdrop-blur-xs border border-theme-accent/30 shadow-xs">{formatValue(currentData.alpha)}</div>
                         <motion.div 
                             className="w-full bg-theme-accent rounded-t-md shadow-[0_0_20px_rgba(197,160,89,0.25)] relative overflow-hidden"
                             initial={{ height: 0 }}
