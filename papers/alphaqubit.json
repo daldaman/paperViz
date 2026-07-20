@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "title": "AlphaQubit",
+    "subtitle": "AI for Quantum Error Correction",
+    "venue": "Nature",
+    "publishDate": "Nov 2024",
+    "description": "A recurrent, transformer-based neural network that learns to decode the surface code with unprecedented accuracy.",
+    "links": [
+      { "label": "Read in Nature", "url": "https://doi.org/10.1038/s41586-024-08148-8" }
+    ],
+    "heroScene": "quantum"
+  },
+  "sections": [
+    {
+      "id": "introduction",
+      "navLabel": "Introduction",
+      "inNav": true,
+      "title": "The Noise Barrier",
+      "dropcap": true,
+      "body": [
+        "Building a large-scale quantum computer requires correcting the errors that inevitably arise in physical systems. The state of the art is the surface code, which encodes information redundantly across many physical qubits.",
+        "However, interpreting the noisy signals from these codes—a task called \"decoding\"—is a massive challenge. Complex noise effects like cross-talk and leakage confuse standard algorithms. AlphaQubit uses machine learning to learn these complex error patterns directly from the quantum processor, achieving accuracy far beyond human-designed algorithms."
+      ],
+      "tone": "default"
+    },
+    {
+      "id": "science",
+      "navLabel": "The Surface Code",
+      "inNav": true,
+      "eyebrow": "THE SYSTEM",
+      "title": "The Surface Code",
+      "dropcap": false,
+      "body": [
+        "In a surface code, \"Data Qubits\" hold the quantum information, while \"Stabilizer Qubits\" interspersed between them act as watchdogs. They measure parity checks (X and Z type) to detect errors without destroying the quantum state.",
+        "When a data qubit flips, adjacent stabilizers light up. The pattern of these lights is the \"syndrome.\" The decoder's job is to look at the syndrome and guess which data qubit flipped."
+      ],
+      "tone": "default",
+      "figureId": "surface-code"
+    },
+    {
+      "id": "innovation",
+      "inNav": false,
+      "eyebrow": "THE INNOVATION",
+      "title": "Neural Decoding",
+      "dropcap": false,
+      "body": [
+        "Standard decoders assume simple, independent errors. Real hardware is messier. AlphaQubit treats decoding as a sequence prediction problem, using a Recurrent Transformer architecture.",
+        "It ingests the history of stabilizer measurements and uses \"soft\" analog information—probabilities rather than just binary 0s and 1s—to make highly informed predictions about logical errors."
+      ],
+      "tone": "inverse",
+      "figureId": "transformer-decoder"
+    },
+    {
+      "id": "results",
+      "inNav": false,
+      "title": "Outperforming the Standard",
+      "dropcap": false,
+      "body": [
+        "AlphaQubit was tested on Google's Sycamore processor and accurate simulations. It consistently outperforms \"Minimum-Weight Perfect Matching\" (MWPM), the industry standard, effectively making the quantum computer appear cleaner than it actually is."
+      ],
+      "tone": "default",
+      "figureId": "performance"
+    },
+    {
+      "id": "impact",
+      "navLabel": "Impact",
+      "inNav": true,
+      "title": "Towards Fault Tolerance",
+      "dropcap": false,
+      "body": [
+        "AlphaQubit maintains its advantage even as the code distance increases (up to distance 11). It handles realistic noise including cross-talk and leakage, effects that often cripple standard decoders.",
+        "By learning from data directly, machine learning decoders can adapt to the unique quirks of each quantum processor, potentially reducing the hardware requirements for useful quantum computing."
+      ],
+      "tone": "default",
+      "figureId": "cryostat",
+      "quote": {
+        "text": "Our work illustrates the ability of machine learning to go beyond human-designed algorithms by learning from data directly, highlighting machine learning as a strong contender for decoding in quantum computers.",
+        "author": "— Bausch et al., Nature (2024)"
+      }
+    }
+  ],
+  "figures": [
+    {
+      "kind": "interactive",
+      "id": "surface-code",
+      "component": "surface-code",
+      "title": "Interactive: Surface Code Detection",
+      "description": "Click the grey Data Qubits to inject errors. Watch the colored Stabilizers light up when they detect an odd number of errors.",
+      "props": {
+        "dataLabel": "Data Qubits",
+        "stabilizerLabel": "Stabilizers"
+      }
+    },
+    {
+      "kind": "interactive",
+      "id": "transformer-decoder",
+      "component": "transformer-decoder",
+      "title": "AlphaQubit Architecture",
+      "description": "The model processes syndrome history using a recurrent transformer, attending to spatial and temporal correlations.",
+      "props": {
+        "inputLabel": "Syndrome History",
+        "modelLabel": "Recurrent Transformer",
+        "outputLabel": "Predicted Correction"
+      }
+    },
+    {
+      "kind": "interactive",
+      "id": "performance",
+      "component": "grouped-bar",
+      "title": "Performance vs Standard",
+      "description": "AlphaQubit consistently achieves lower logical error rates (LER) than the standard Minimum-Weight Perfect Matching (MWPM) decoder.",
+      "props": {
+        "metricLabel": "LOGICAL ERROR RATE (LOWER IS BETTER)",
+        "valueFormat": "percent",
+        "lowerIsBetter": true,
+        "categories": [
+          { "id": "d3", "label": "Distance 3" },
+          { "id": "d5", "label": "Distance 5" },
+          { "id": "d11", "label": "Distance 11" }
+        ],
+        "series": [
+          {
+            "id": "standard",
+            "label": "Standard (MWPM)",
+            "values": { "d3": 3.5, "d5": 3.6, "d11": 0.0041 }
+          },
+          {
+            "id": "ours",
+            "label": "AlphaQubit",
+            "values": { "d3": 2.9, "d5": 2.75, "d11": 0.0009 }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "interactive",
+      "id": "cryostat",
+      "component": "quantum-computer-scene",
+      "description": "Interactive Cryostat visualization",
+      "props": {}
+    }
+  ],
+  "authors": {
+    "eyebrow": "RESEARCH TEAM",
+    "heading": "Key Contributors",
+    "subheading": "A collaboration of dedicated authors and researchers.",
+    "list": [
+      { "name": "Johannes Bausch", "role": "Google DeepMind" },
+      { "name": "Andrew W. Senior", "role": "Google DeepMind" },
+      { "name": "Francisco J. H. Heras", "role": "Google DeepMind" },
+      { "name": "Thomas Edlich", "role": "Google DeepMind" },
+      { "name": "Alex Davies", "role": "Google DeepMind" },
+      { "name": "Michael Newman", "role": "Google Quantum AI" }
+    ],
+    "footnote": "And many others contributing to theory, hardware, and research."
+  },
+  "footer": {
+    "blurb": "Based on research published in Nature (2024). Created with Google AI Studio."
+  }
+}

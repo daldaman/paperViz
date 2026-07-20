@@ -16,9 +16,16 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - [x] v3→v4 default-scale audit: remapped `shadow-sm`→`shadow-xs` (9), bare `rounded`→`rounded-sm` (32), `rounded-sm`→`rounded-xs` (3), `drop-shadow-sm`→`drop-shadow-xs` (1), `backdrop-blur-sm`→`backdrop-blur-xs` (5, found via compiled-CSS check, not in original plan checklist). No bare uncolored `border` utilities found — v4 border-color compat snippet not needed. No bare `ring` utilities found — no remap needed.
 
 ## Phase 2 — Content schema + validation
-- [ ] `src/content/schema.ts`: zod `PaperContentSchema` (meta/sections/figures/authors/footer) + `ConceptMapSpec`
-- [ ] `src/content/loader.ts`: `import.meta.glob('/papers/*.json', {eager:true})` + safeParse, loud errors
-- [ ] Hand-migrate AlphaQubit content → `papers/alphaqubit.json` (regression baseline)
+- [x] `src/content/schema.ts`: zod `PaperContentSchema` (meta/sections/figures/authors/footer) + `ConceptMapSpec`
+- [x] `src/content/loader.ts`: `import.meta.glob('/papers/*.json', {eager:true})` + safeParse, loud errors
+- [x] Hand-migrate AlphaQubit content → `papers/alphaqubit.json` (regression baseline)
+- [x] `npm i zod` (runtime dep); `npm run typecheck` script added to `package.json`
+- [x] `src/vite-env.d.ts` added (`/// <reference types="vite/client" />`) — needed for `import.meta.glob`/`import.meta.env` typings since this AI-Studio-derived scaffold never had one and `tsconfig.json`'s `"types": ["node"]` doesn't pull it in automatically
+- [x] Validated the real `schema.ts` at runtime (esbuild-bundled, outside the repo in scratch) against `papers/alphaqubit.json` (passes) and 7 hand-broken variants (all correctly rejected with legible zod issues) — stronger than the plan's "read carefully" fallback bar
+- **Deviation from plan text (approved in task brief):** did NOT rewire `src/App.tsx` to consume the new schema/loader this phase — that happens in Phase 3's component split, to avoid double field-mapping work. `App.tsx` still renders from `src/paperData.ts` unchanged (diff is empty for that file).
+- **Deliberate dev-only hook:** `src/main.tsx` now imports `{ papers }` from `./content/loader` and logs `[paperViz] papers loaded: [...]` under `import.meta.env.DEV`. This is intentionally throwaway — Phase 3 replaces it with real consumption (Nav/sections/etc. reading from `papers[slug]`). Don't flag it as a leftover console.log.
+- **Judgment call:** the `cryostat` figure's `description: "Interactive Cryostat visualization"` was NOT in the plan's literal figure-mapping list (which specified `props:{}` only) but WAS a hardcoded caption string in `App.tsx`'s JSX. Added it to avoid silently dropping content, per the "hand-migrate EVERYTHING ... plus the hardcoded strings in App.tsx" instruction.
+- **Judgment call:** footer.blurb was kept **verbatim**, including "Created with Google AI Studio" — which is no longer literally true now that the app is a Vite/Claude-Code-built engine — because Phase 3's visual-parity regression check needs byte-identical rendered text vs. Phase 0. Flagging this phrase as a candidate for a real edit once Phase 3/5 content-editing tooling exists.
 
 ## Phase 3 — Split the 1552-line App.tsx
 - [ ] `src/sections/` (Nav, MobileMenu, Hero, generic ProseSection, QuoteBlock, AuthorsSection, Footer)
