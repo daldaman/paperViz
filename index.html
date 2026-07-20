@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlphaQubit: Quantum Error Decoding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['var(--font-serif)', '"Playfair Display"', 'serif'],
+              sans: ['var(--font-sans)', '"Inter"', 'sans-serif'],
+            },
+            colors: {
+              nobel: {
+                gold: 'var(--color-accent, #C5A059)',
+                dark: 'var(--color-bg-dark, #1a1a1a)',
+                cream: 'var(--color-bg, #F9F8F4)',
+              },
+              theme: {
+                bg: 'var(--color-bg, #F9F8F4)',
+                card: 'var(--color-card-bg, #ffffff)',
+                main: 'var(--color-text-main, #1c1917)',
+                body: 'var(--color-text-body, #44403c)',
+                muted: 'var(--color-text-muted, #78716c)',
+                border: 'var(--color-border, #e7e5e4)',
+                accent: 'var(--color-accent, #C5A059)',
+                'accent-muted': 'var(--color-accent-muted, rgba(197, 160, 89, 0.1))',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 100px;
+      }
+      body {
+        background-color: var(--color-bg, #F9F8F4);
+        color: var(--color-text-body, #1a1a1a);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      @media print {
+        nav, footer, button {
+          display: none !important;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.0/",
+    "react/": "https://esm.sh/react@^19.2.0/",
+    "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.4.0",
+    "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
+    "three": "https://esm.sh/three@^0.181.1",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.24",
+    "lucide-react": "https://esm.sh/lucide-react@^0.553.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
