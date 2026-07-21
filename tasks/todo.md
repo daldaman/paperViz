@@ -43,10 +43,22 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - Verified live in-browser via the running dev server: all 5 sections, 4 theme presets, embed mode (`?embed=true&theme=forest`), customizer content-tab live edit, and the localStorage detect-and-clear path (seeded an old flat-shape value, confirmed the `console.info` + clear + fallback-to-JSON behavior).
 
 ## Phase 4 — Figure registry + components
-- [ ] `src/figures/registry.ts` (name → component + props schema)
-- [ ] Generalize `PerformanceMetricDiagram` → `InteractiveGroupedBar`; move quantum diagrams/scenes to `src/figures/quantum/`
-- [ ] NEW: `StaticFigure` (caption/credit/lightbox, via `withBase()`), `EventStudyExplorer`, `ConceptMapDiagram` — load the dataviz skill first
-- [ ] Delete `src/paperData.ts` when last consumer migrates
+- [x] `src/figures/registry.ts` (name → component + props schema; `renderFigure()` dispatches by `kind`, `getInteractivePropsSchema()` feeds `src/content/loader.ts`'s post-parse props validation). Unknown `component` name renders nothing + loud `console.error`.
+- [x] `ProseSection.tsx`'s Phase-3 temporary literal switch on `figure.component` replaced by the registry lookup (`renderFigure`)
+- [x] Generalize `PerformanceMetricDiagram` → `InteractiveGroupedBar` (move+rename only, per plan scope — kept its existing dark-stone visual design to preserve AlphaQubit pixel parity); registered props schema (categories min 1, series min 1, values keyed by category id)
+- [x] `components/Diagrams.tsx` → `src/figures/quantum/SurfaceCodeDiagram.tsx` + `src/figures/quantum/TransformerDecoderDiagram.tsx` (git mv + split); `components/QuantumScene.tsx` → `src/figures/quantum/QuantumScene.tsx` (git mv); `components/` deleted
+- [x] `src/lib/publicPath.ts`: `withBase(...segments)` joins `import.meta.env.BASE_URL` with segments, no double slashes
+- [x] NEW `src/figures/StaticFigure.tsx`: figure + caption + optional credit, click-to-open lightbox (dark scrim, Escape/scrim-click close, framer-motion fade/scale), `loading="lazy"`; resolves `src` via `withBase('papers', slug, figure.src)` using a new `src/figures/FigureRenderContext.tsx` (`FigureRenderProvider`) threading the active slug down from `App.tsx`
+- [x] NEW `src/figures/EventStudyExplorer.tsx` (registered `event-study-explorer`): themed SVG event-study chart — CI band, coefficient line (path-length draw-in), zero line, hollow reference-period marker, hover+focus tooltip, responsive viewBox. Dataviz-skill-informed decisions documented inline (single-series → no legend box; polarity read from position vs. the zero line rather than a second hue, since the palette has one accent to spend).
+- [x] NEW `src/figures/ConceptMapDiagram.tsx` (registered for kind `diagram`): renders `ConceptMapSpec` — column/topological layout, node-type literal-lookup styling (driver/mechanism/outcome/moderator/neutral), edge-sign literal-lookup styling (positive = accent, negative = muted tone + always-on "⊖" chip + hollow arrowhead — never color alone), `dashed` style as an independent channel, foreignObject text wrapping, staggered framer-motion entrance, always-shown legend.
+- [x] NEW `src/figures/hero/HeroSceneRegistry.tsx` (`meta.heroScene` → component) + `src/figures/hero/AbstractNetworkScene.tsx` (r3f drifting node/edge network, ≤40 nodes, accent hex pulled live from `useTheme()`/`THEMES`); `Hero.tsx` now uses the registry instead of a hardcoded scene
+- [x] Fixed pre-existing bug (shipped since the original AI Studio export, found in Phase 3): `animate-fade-in`/`animate-fade-in-up` used in Nav/AuthorsSection/CustomizerPanel had no backing `@keyframes` anywhere — added to `src/index.css` (fill-mode `both`, not just `forwards`, so `animationDelay` doesn't flash); noted in `tasks/lessons.md`.
+- [x] Dev fixture `papers/_preview.json` + `public/papers/_preview/placeholder.svg` exercising all new figure kinds + `abstract-network` hero; `src/content/loader.ts` excludes `_`-prefixed slugs from `listPapers()` while still loading them into `papers`
+- [x] Dataviz-skill gap found on review (loaded `references/marks-and-anatomy.md`, `interaction.md`, `anti-patterns.md`, `components.md`): "every chart has a table-view toggle (the accessibility twin)" was missing — added an accessible `<details>`-based data table to `EventStudyExplorer`, `ConceptMapDiagram`, and `InteractiveGroupedBar`
+- [x] Browser-verified all new figures + `abstract-network` hero live via `?paper=_preview`, including Cosmic Slate (dark) for concept-map negative-edge legibility; fixed one issue found live — the dev fixture had `grouped-bar` in the narrow `figure-left` layout slot (causing overflow) instead of the wide `figure-below` slot the component is actually shipped in on `alphaqubit.json`; not a component bug, a fixture misconfiguration, now corrected
+- [x] Spot-checked `alphaqubit` still renders identically post-registry-refactor (hero scene, surface-code + transformer-decoder diagrams, grouped-bar in `figure-below`, quantum-computer-scene in `impact`, pull-quote)
+- [x] `npm run typecheck` + `npm run build` clean
+- [x] `src/paperData.ts` was already deleted in Phase 3 (confirmed no remaining references)
 
 ## Phase 5 — Customizer upgrades
 - [ ] Extract to `src/customizer/` (panel + 4 tabs); ContentTab becomes schema-generic (recursive form from zod shape)

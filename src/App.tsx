@@ -19,9 +19,10 @@ import { AuthorsSection } from './sections/AuthorsSection';
 import { Footer } from './sections/Footer';
 import { CustomizerPanel } from './customizer/CustomizerPanel';
 import { updateAtPath, type PathSegment } from './customizer/updateAtPath';
+import { FigureRenderProvider } from './figures/FigureRenderContext';
 
 const STORAGE_KEY = 'academic_paper_data';
-const PAPER_SLUG = 'alphaqubit'; // hardcoded until Phase 6's multi-paper routing
+const PAPER_SLUG = 'alphaqubit';
 
 function loadInitialContent(): PaperContent | undefined {
   const fallback = papers[PAPER_SLUG];
@@ -118,12 +119,14 @@ const AppShell: React.FC = () => {
       <Nav content={content} />
       <Hero content={content} />
 
-      <main>
-        {content.sections.map((section) => (
-          <ProseSection key={section.id} section={section} figures={content.figures} />
-        ))}
-        <AuthorsSection authors={content.authors} />
-      </main>
+      <FigureRenderProvider slug={PAPER_SLUG}>
+        <main>
+          {content.sections.map((section) => (
+            <ProseSection key={section.id} section={section} figures={content.figures} />
+          ))}
+          <AuthorsSection authors={content.authors} />
+        </main>
+      </FigureRenderProvider>
 
       <Footer content={content} onOpenCustomizer={() => setPanelOpen(true)} />
 

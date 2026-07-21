@@ -11,84 +11,19 @@
  * fields reproduces each section's original markup exactly rather than
  * forcing a single compromise layout on sections that looked different.
  *
- * The figure-rendering switch below (`renderInteractiveFigure`) is the
- * "temporary literal switch on figure.component" called out in the Phase 3
- * plan — Phase 4's figure registry replaces it.
+ * Figure rendering is delegated to src/figures/registry.ts's renderFigure()
+ * — Phase 4 replaced the Phase-3 "temporary literal switch on
+ * figure.component" that used to live in this file.
  */
 import React from 'react';
 import { BookOpen } from 'lucide-react';
 import type { ProseSection as ProseSectionData, Figure } from '../content/schema';
-import {
-  SurfaceCodeDiagram,
-  TransformerDecoderDiagram,
-  PerformanceMetricDiagram,
-  type PerformanceMetricCategory,
-  type PerformanceMetricSeries,
-} from '../../components/Diagrams';
-import { QuantumComputerScene } from '../../components/QuantumScene';
+import { renderFigure } from '../figures/registry';
 import { QuoteBlock } from './QuoteBlock';
 
 interface ProseSectionProps {
   section: ProseSectionData;
   figures: Figure[];
-}
-
-function renderInteractiveFigure(figure: Figure): React.ReactNode {
-  if (figure.kind !== 'interactive') {
-    // Static images and concept-map diagrams arrive in Phase 4's figure registry.
-    return null;
-  }
-  const props = figure.props ?? {};
-
-  switch (figure.component) {
-    case 'surface-code':
-      return (
-        <SurfaceCodeDiagram
-          title={figure.title}
-          description={figure.description}
-          dataLabel={String(props.dataLabel ?? '')}
-          stabilizerLabel={String(props.stabilizerLabel ?? '')}
-        />
-      );
-    case 'transformer-decoder':
-      return (
-        <TransformerDecoderDiagram
-          title={figure.title}
-          description={figure.description}
-          inputLabel={String(props.inputLabel ?? '')}
-          modelLabel={String(props.modelLabel ?? '')}
-          outputLabel={String(props.outputLabel ?? '')}
-        />
-      );
-    case 'grouped-bar':
-      return (
-        <PerformanceMetricDiagram
-          title={figure.title}
-          description={figure.description}
-          metricLabel={String(props.metricLabel ?? '')}
-          categories={Array.isArray(props.categories) ? (props.categories as PerformanceMetricCategory[]) : []}
-          series={Array.isArray(props.series) ? (props.series as PerformanceMetricSeries[]) : []}
-          valueFormat={typeof props.valueFormat === 'string' ? props.valueFormat : undefined}
-          lowerIsBetter={typeof props.lowerIsBetter === 'boolean' ? props.lowerIsBetter : undefined}
-        />
-      );
-    case 'quantum-computer-scene':
-      // QuantumComputerScene renders no title/caption of its own (unlike the
-      // other three diagrams) — the aspect-square frame + caption overlay
-      // was App.tsx's Impact-section markup, reproduced here.
-      return (
-        <div className="aspect-square bg-theme-bg/60 rounded-xl overflow-hidden relative border border-theme-border shadow-inner">
-          <QuantumComputerScene />
-          {figure.description && (
-            <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-theme-muted font-serif italic z-10 px-4 bg-theme-card/75 backdrop-blur-xs py-1 border-t border-theme-border">
-              {figure.description}
-            </div>
-          )}
-        </div>
-      );
-    default:
-      return null;
-  }
 }
 
 function Eyebrow({ section }: { section: ProseSectionData }) {
@@ -179,7 +114,7 @@ function BodyParagraphs({ section }: { section: ProseSectionData }) {
 
 export const ProseSection: React.FC<ProseSectionProps> = ({ section, figures }) => {
   const figure = section.figureId ? figures.find((f) => f.id === section.figureId) : undefined;
-  const figureElement = figure ? renderInteractiveFigure(figure) : null;
+  const figureElement = figure ? renderFigure(figure) : null;
   const hasFigure = Boolean(figureElement);
 
   // --- prose (introduction) ---

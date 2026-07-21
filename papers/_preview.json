@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "title": "Preview Fixture",
+    "subtitle": "Dev-only kitchen sink for every figure kind",
+    "venue": "Internal",
+    "publishDate": "Jul 2026",
+    "description": "A dev-only content fixture exercising every registered figure kind — static image + lightbox, event-study explorer, concept map, and interactive grouped bar — plus the abstract-network hero scene. Excluded from listPapers() via the \"_\" slug prefix, so it never appears in the future gallery.",
+    "links": [
+      { "label": "paperViz repo", "url": "https://github.com/daldaman/paperViz" }
+    ],
+    "heroScene": "abstract-network"
+  },
+  "sections": [
+    {
+      "id": "introduction",
+      "navLabel": "Introduction",
+      "inNav": true,
+      "eyebrow": "Dev Fixture",
+      "title": "Every Figure Kind, One Page",
+      "dropcap": true,
+      "layout": "prose",
+      "tone": "default",
+      "body": [
+        "This paper does not exist. papers/_preview.json exists purely so every registered figure component — StaticFigure, EventStudyExplorer, ConceptMapDiagram, and InteractiveGroupedBar — plus the abstract-network hero scene can be exercised and visually checked across all four theme presets without touching the AlphaQubit regression baseline.",
+        "Slugs starting with an underscore load normally but are excluded from listPapers(), so this fixture is reachable at ?paper=_preview (from Phase 6 onward) but never listed in the public gallery."
+      ]
+    },
+    {
+      "id": "static-figure",
+      "navLabel": "Static Figure",
+      "inNav": true,
+      "eyebrow": "STATIC FIGURE",
+      "title": "Cribbed From The Paper PDF",
+      "layout": "figure-right",
+      "tone": "default",
+      "figureId": "placeholder-fig",
+      "body": [
+        "StaticFigure renders an image, a caption, an optional credit line, and a click-to-open lightbox (fixed dark scrim, Escape or scrim-click to close). The image path is resolved via withBase('papers', slug, figure.src) using the slug threaded down through FigureRenderProvider — never a bare /papers/... path, which would 404 once the site is deployed under the /paperViz/ base path."
+      ]
+    },
+    {
+      "id": "event-study",
+      "navLabel": "Event Study",
+      "inNav": true,
+      "title": "Stylized Event-Study Explorer",
+      "layout": "figure-below",
+      "tone": "default",
+      "figureId": "event-study-fig",
+      "body": [
+        "Twelve leads/lags around a stylized treatment date, reference period pinned at t = -1, confidence intervals widening at both tails. Hover or tab to any marker for its coefficient and interval."
+      ]
+    },
+    {
+      "id": "concept-map",
+      "inNav": false,
+      "eyebrow": "MECHANISM",
+      "title": "Concept Map With Mixed Signs",
+      "layout": "figure-left",
+      "tone": "inverse",
+      "figureId": "concept-map-fig",
+      "body": [
+        "Six nodes across three columns, mixed positive/negative/neutral edge signs, and one dashed moderating edge — rendered here on a dark (inverse) panel to check the negative-edge legibility across theme presets, especially Cosmic Slate."
+      ]
+    },
+    {
+      "id": "grouped-bar",
+      "navLabel": "Grouped Bar",
+      "inNav": true,
+      "eyebrow": "RESULTS",
+      "title": "Interactive Grouped Bar",
+      "layout": "figure-below",
+      "tone": "default",
+      "figureId": "grouped-bar-fig",
+      "body": [
+        "InteractiveGroupedBar (renamed from PerformanceMetricDiagram in Phase 4) is category-switchable and validated against a registered props schema in the loader — categories and series both require at least one entry."
+      ]
+    }
+  ],
+  "figures": [
+    {
+      "kind": "static",
+      "id": "placeholder-fig",
+      "src": "placeholder.svg",
+      "alt": "Placeholder line chart used to exercise the StaticFigure component",
+      "caption": "Figure 1 (placeholder). Replace with a real crop from the paper PDF before shipping a real paper.",
+      "credit": "Source: dev fixture — not a real citation."
+    },
+    {
+      "kind": "interactive",
+      "id": "event-study-fig",
+      "component": "event-study-explorer",
+      "title": "Effect on Cost Efficiency Around WFH Adoption (Stylized)",
+      "description": "Coefficients and 95% CIs from a stylized leads/lags specification.",
+      "props": {
+        "xLabel": "Event time (years since WFH adoption)",
+        "yLabel": "Coefficient",
+        "unit": "pp",
+        "referenceLabel": "t = -1",
+        "note": "Stylized preview data — not estimated from the paper's replication files.",
+        "points": [
+          { "t": -5, "coef": 0.3, "lo": -1.0, "hi": 1.6 },
+          { "t": -4, "coef": 0.1, "lo": -0.7, "hi": 0.9 },
+          { "t": -3, "coef": -0.05, "lo": -0.6, "hi": 0.5 },
+          { "t": -2, "coef": 0.05, "lo": -0.4, "hi": 0.5 },
+          { "t": -1, "coef": 0, "lo": 0, "hi": 0, "isReference": true, "label": "t = -1" },
+          { "t": 0, "coef": 0.4, "lo": -0.1, "hi": 0.9 },
+          { "t": 1, "coef": 1.1, "lo": 0.5, "hi": 1.7 },
+          { "t": 2, "coef": 1.8, "lo": 1.1, "hi": 2.5 },
+          { "t": 3, "coef": 2.3, "lo": 1.5, "hi": 3.1 },
+          { "t": 4, "coef": 2.6, "lo": 1.6, "hi": 3.6 },
+          { "t": 5, "coef": 2.8, "lo": 1.6, "hi": 4.0 },
+          { "t": 6, "coef": 2.9, "lo": 1.4, "hi": 4.4 }
+        ]
+      }
+    },
+    {
+      "kind": "diagram",
+      "id": "concept-map-fig",
+      "title": "Stylized Mechanism Map",
+      "description": "Mixed positive/negative/neutral signs across three columns, with one dashed moderating edge.",
+      "spec": {
+        "nodes": [
+          { "id": "wfh-exposure", "label": "Staff WFH Exposure ↑", "type": "driver", "column": 0, "row": 0, "note": "Share of staff-hours worked remotely, by branch-quarter." },
+          { "id": "context", "label": "Local Labor Market Conditions", "type": "neutral", "column": 0, "row": 1 },
+          { "id": "cost-efficiency", "label": "Cost Efficiency ↑ (delayed ~1yr)", "type": "mechanism", "column": 1, "row": 0 },
+          { "id": "revenue-efficiency", "label": "Revenue Efficiency ↓", "type": "mechanism", "column": 1, "row": 1 },
+          { "id": "footprint", "label": "Physical Footprint (moderator)", "type": "moderator", "column": 1, "row": 2, "note": "E.g. branch density, in-person relationship intensity." },
+          { "id": "profit", "label": "Net Profit ≈ 0", "type": "outcome", "column": 2, "row": 0 }
+        ],
+        "edges": [
+          { "id": "e1", "from": "wfh-exposure", "to": "cost-efficiency", "sign": "positive", "label": "raises" },
+          { "id": "e2", "from": "wfh-exposure", "to": "revenue-efficiency", "sign": "negative", "label": "lowers" },
+          { "id": "e3", "from": "cost-efficiency", "to": "profit", "sign": "positive" },
+          { "id": "e4", "from": "revenue-efficiency", "to": "profit", "sign": "negative" },
+          { "id": "e5", "from": "footprint", "to": "cost-efficiency", "sign": "positive", "label": "amplifies", "style": "dashed" },
+          { "id": "e6", "from": "context", "to": "revenue-efficiency", "sign": "neutral", "label": "controls for" }
+        ]
+      }
+    },
+    {
+      "kind": "interactive",
+      "id": "grouped-bar-fig",
+      "component": "grouped-bar",
+      "title": "Illustrative Grouped Bar",
+      "description": "Category-switchable comparison, stylized for the dev fixture.",
+      "props": {
+        "metricLabel": "ILLUSTRATIVE METRIC (STYLIZED)",
+        "valueFormat": "percent",
+        "lowerIsBetter": false,
+        "categories": [
+          { "id": "branch", "label": "Branch-Heavy" },
+          { "id": "digital", "label": "Digital-Heavy" },
+          { "id": "hybrid", "label": "Hybrid" }
+        ],
+        "series": [
+          { "id": "pre", "label": "Pre-Period", "values": { "branch": 1.8, "digital": 1.2, "hybrid": 1.5 } },
+          { "id": "post", "label": "Post-Period", "values": { "branch": 1.6, "digital": 2.1, "hybrid": 2.4 } }
+        ]
+      }
+    }
+  ],
+  "authors": {
+    "eyebrow": "DEV FIXTURE",
+    "heading": "Not A Real Paper",
+    "subheading": "This content exists purely to exercise every figure kind for visual QA.",
+    "list": [
+      { "name": "Preview Fixture", "role": "papers/_preview.json" }
+    ],
+    "footnote": "Excluded from listPapers() — never shown in the gallery."
+  },
+  "footer": {
+    "blurb": "Dev-only content fixture — excluded from the paper gallery via the \"_\" slug prefix convention."
+  }
+}

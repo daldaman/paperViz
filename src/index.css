@@ -28,3 +28,29 @@ body {
 @media print {
   nav, footer, button { display: none !important; }
 }
+
+/*
+ * These two classes are used throughout Nav/AuthorsSection/CustomizerPanel
+ * (`animate-fade-in`, `animate-fade-in-up`) but shipped with no backing
+ * @keyframes anywhere in the original AI Studio export — see
+ * tasks/lessons.md. Fill-mode is `both` (not just `forwards`): AuthorCard
+ * combines this class with an inline `animationDelay`, and `forwards` alone
+ * leaves the element at its default (fully visible) style during the delay,
+ * then snaps to the 0% keyframe when the animation starts — a visible
+ * flash. `both` also holds the 0% keyframe during the delay, which is what
+ * "so animationDelay works" requires.
+ */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
+}

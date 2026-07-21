@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import { HeroScene } from '../../components/QuantumScene';
+import { HeroSceneRenderer } from '../figures/hero/HeroSceneRegistry';
 import type { PaperContent } from '../content/schema';
 import { useTheme } from '../theme/useTheme';
 import { THEMES } from '../theme/themes';
@@ -27,7 +27,7 @@ export const Hero: React.FC<HeroProps> = ({ content }) => {
 
   return (
     <header className={`relative flex items-center justify-center overflow-hidden transition-all duration-500 ${embedMode ? 'h-[75vh] min-h-[460px] border-b border-theme-border' : 'h-screen'}`}>
-      {meta.heroScene === 'quantum' && <HeroScene />}
+      <HeroSceneRenderer heroScene={meta.heroScene} />
 
       {/* Dynamic Gradient Overlay using background custom variable */}
       <div

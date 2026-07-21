@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="ph-title">
+  <title id="ph-title">Placeholder figure — dev fixture</title>
+  <rect width="800" height="500" fill="#F1EFE9"/>
+  <rect x="1" y="1" width="798" height="498" fill="none" stroke="#D8D3C8" stroke-width="2"/>
+  <g stroke="#C7C1B3" stroke-width="1">
+    <line x1="0" y1="125" x2="800" y2="125"/>
+    <line x1="0" y1="250" x2="800" y2="250"/>
+    <line x1="0" y1="375" x2="800" y2="375"/>
+  </g>
+  <g fill="none" stroke="#C5A059" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="90,360 220,300 350,320 480,220 610,240 720,150"/>
+  </g>
+  <g fill="#C5A059">
+    <circle cx="90" cy="360" r="6"/>
+    <circle cx="220" cy="300" r="6"/>
+    <circle cx="350" cy="320" r="6"/>
+    <circle cx="480" cy="220" r="6"/>
+    <circle cx="610" cy="240" r="6"/>
+    <circle cx="720" cy="150" r="6"/>
+  </g>
+  <text x="400" y="450" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#78716C">
+    Placeholder figure — replace before publishing
+  </text>
+</svg>
