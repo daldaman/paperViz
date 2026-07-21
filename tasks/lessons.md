@@ -36,3 +36,7 @@ produces a false "this looks broken" signal that's actually a fixture bug,
 not a component bug — check how a component is *actually* used in production
 content before concluding a rendering issue is real. Fixed by changing the
 fixture's `layout` to `figure-below` to match.
+
+## 2026-07-21 — Concept-map edge labels overlapped graph elements (user-reported on the deployed pilot)
+- Never place edge labels at the straight-line midpoint of endpoints: for curved edges the midpoint is off the path, and short corridor edges cannot fit a long label at all. Place ON the Bezier, opaque background, deterministic candidate search (t along curve x perpendicular nudge) against node boxes + already-placed labels, and wrap labels wider than the corridor.
+- Verify diagrams at final rendered size with real content, chip by chip — "renders without console errors" and a passing glance at a screenshot both missed this.
