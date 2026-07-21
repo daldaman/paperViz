@@ -98,6 +98,12 @@ function rectsOverlap(a: Rect, b: Rect): boolean {
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 }
 
+function overlapArea(a: Rect, b: Rect): number {
+  const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+  const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+  return w > 0 && h > 0 ? w * h : 0;
+}
+
 function cubicPoint(t: number, p0: number, p1: number, p2: number, p3: number): number {
   const u = 1 - t;
   return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
@@ -109,28 +115,47 @@ function cubicTangent(t: number, p0: number, p1: number, p2: number, p3: number)
 }
 
 const CHIP_T_CANDIDATES = [0.5, 0.4, 0.6, 0.3, 0.7, 0.22, 0.78];
-const CHIP_NORMAL_OFFSETS = [0, -16, 16, -26, 26];
-// A single-line chip wider than this wraps to two lines — column corridors
-// are only ~88px wide, so a long label can never fit between nodes on one line.
-const CHIP_WRAP_THRESHOLD = 120;
+const CHIP_NORMAL_OFFSETS = [0, -16, 16, -26, 26, -36, 36];
+// Size ladder for labels. Thin single-line pills are the most dodge-able
+// shape in a tight corridor (a tall wrapped box can't get off a line no
+// matter where it slides), so: normal 9px pill → small 8px pill for
+// medium-long labels → two-line wrap only as a last resort.
+const CHIP_SMALL_THRESHOLD = 120; // 9px single-line width above which we drop to 8px
+const CHIP_WRAP_THRESHOLD = 170; // 8px single-line width above which we wrap
 
 /** Rough text width at the chip's 9px semibold font + padding + border. */
 function estimateChipWidth(text: string): number {
   return Math.ceil(text.length * 5.4) + 20;
 }
 
-/** Chip box dimensions, wrapping long labels onto two lines. */
-function chipDims(text: string): { w: number; h: number; wrap: boolean } {
+type ChipSize = 'normal' | 'small' | 'wrap';
+
+/** Chip box dimensions per the size ladder above. */
+function chipDims(text: string): { w: number; h: number; size: ChipSize } {
   const w1 = estimateChipWidth(text);
-  if (w1 <= CHIP_WRAP_THRESHOLD) return { w: w1, h: 18, wrap: false };
-  return { w: Math.max(84, Math.ceil(w1 * 0.6)), h: 30, wrap: true };
+  if (w1 <= CHIP_SMALL_THRESHOLD) return { w: w1, h: 18, size: 'normal' };
+  const w1Small = Math.ceil(text.length * 4.8) + 14; // 8px font + tighter padding
+  if (w1Small <= CHIP_WRAP_THRESHOLD) return { w: w1Small, h: 16, size: 'small' };
+  // Two lines at 8px; height estimated honestly (2 × ~10px lines + padding).
+  return { w: Math.max(88, Math.ceil(w1Small * 0.6)), h: 32, size: 'wrap' };
+}
+
+interface CurveSamples {
+  own: { x: number; y: number }[];
+  others: { x: number; y: number }[];
+}
+
+function pointInRect(p: { x: number; y: number }, r: Rect): boolean {
+  return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
 }
 
 function placeChip(
   bezier: { sx: number; sy: number; c1x: number; c1y: number; c2x: number; c2y: number; tx: number; ty: number },
   chipW: number,
   chipH: number,
-  obstacles: Rect[],
+  nodeObstacles: Rect[],
+  chipObstacles: Rect[],
+  curves: CurveSamples,
   bounds: { width: number; height: number },
 ): Rect {
   const { sx, sy, c1x, c1y, c2x, c2y, tx, ty } = bezier;
@@ -152,9 +177,27 @@ function placeChip(
       const rect: Rect = { x: cx - chipW / 2, y: cy - chipH / 2, w: chipW, h: chipH };
 
       let score = 0;
-      for (const ob of obstacles) {
-        if (rectsOverlap(rect, ob)) score += 10;
+      // Node overlap is graded by AREA, not a flat hit: a pill wider than
+      // its corridor must overhang a node somewhere, and the scorer should
+      // prefer the position with the smallest overhang (chips render above
+      // nodes, so a small corner graze is harmless).
+      for (const ob of nodeObstacles) {
+        const a = overlapArea(rect, ob);
+        if (a > 0) score += 3 + a / 60;
       }
+      // Chip-on-chip overlap is never acceptable — both become unreadable.
+      for (const ob of chipObstacles) {
+        if (rectsOverlap(rect, ob)) score += 14;
+      }
+      // Don't swallow your own curve: sitting ON the line is fine (the opaque
+      // background masks a short stretch), but hiding most of it destroys the
+      // edge's readability — penalize own-curve sample points inside the chip
+      // beyond a small allowance.
+      const ownCovered = curves.own.reduce((n, p) => n + (pointInRect(p, rect) ? 1 : 0), 0);
+      if (ownCovered > 2) score += (ownCovered - 2) * 1.4;
+      // Blanketing a NEIGHBORING line is worse — there's no "this is my
+      // label" excuse.
+      score += curves.others.reduce((n, p) => n + (pointInRect(p, rect) ? 2 : 0), 0);
       // Stay inside the drawing.
       if (rect.x < 2 || rect.y < 2 || rect.x + rect.w > bounds.width - 2 || rect.y + rect.h > bounds.height - 2) score += 6;
       // Prefer the canonical on-curve midpoint.
@@ -298,26 +341,37 @@ export const ConceptMapDiagram: React.FC<ConceptMapDiagramProps> = ({ title, des
   // instead of stacking.
   const chipRectByEdgeId = useMemo(() => {
     const obstacles: Rect[] = laidOutNodes.map((n) => ({ x: n.x - 4, y: n.y - 4, w: n.w + 8, h: n.h + 8 }));
-    const rects = new Map<string, Rect & { wrap: boolean }>();
-    validEdges.forEach((edge) => {
+
+    // Pre-sample every edge's curve once (15 interior points each) so the
+    // placement scorer can see line work, not just boxes.
+    const sampled = validEdges.map((edge) => {
       const source = nodeById.get(edge.from)!;
       const target = nodeById.get(edge.to)!;
       const { sx, sy, tx, ty } = anchorPoints(source, target);
       const dx = (tx - sx) * 0.5;
+      const bez = { sx, sy, c1x: sx + dx, c1y: sy, c2x: tx - dx, c2y: ty, tx, ty };
+      const points = Array.from({ length: 15 }, (_, k) => {
+        const t = (k + 1) / 16;
+        return {
+          x: cubicPoint(t, bez.sx, bez.c1x, bez.c2x, bez.tx),
+          y: cubicPoint(t, bez.sy, bez.c1y, bez.c2y, bez.ty),
+        };
+      });
+      return { edge, bez, points };
+    });
+
+    const placedChips: Rect[] = [];
+    const rects = new Map<string, Rect & { size: ChipSize }>();
+    sampled.forEach(({ edge, bez, points }) => {
       const style = EDGE_STYLE[edge.sign];
       const showChip = style.alwaysChip || Boolean(edge.label);
       if (!showChip) return;
       const chipText = edge.label ? `${style.icon}${edge.label}` : style.icon.trim();
       const dims = chipDims(chipText);
-      const rect = placeChip(
-        { sx, sy, c1x: sx + dx, c1y: sy, c2x: tx - dx, c2y: ty, tx, ty },
-        dims.w,
-        dims.h,
-        obstacles,
-        { width, height },
-      );
-      obstacles.push(rect);
-      rects.set(edge.id, { ...rect, wrap: dims.wrap });
+      const others = sampled.filter((s) => s.edge.id !== edge.id).flatMap((s) => s.points);
+      const rect = placeChip(bez, dims.w, dims.h, obstacles, placedChips, { own: points, others }, { width, height });
+      placedChips.push(rect);
+      rects.set(edge.id, { ...rect, size: dims.size });
     });
     return rects;
   }, [validEdges, nodeById, laidOutNodes, width, height]);
@@ -364,41 +418,20 @@ export const ConceptMapDiagram: React.FC<ConceptMapDiagramProps> = ({ title, des
               const dx = (tx - sx) * 0.5;
               const path = `M ${sx} ${sy} C ${sx + dx} ${sy}, ${tx - dx} ${ty}, ${tx} ${ty}`;
               const style = EDGE_STYLE[edge.sign];
-              const chipRect = chipRectByEdgeId.get(edge.id);
-              const chipText = edge.label ? `${style.icon}${edge.label}` : style.icon.trim();
 
               return (
-                <g key={edge.id}>
-                  <motion.path
-                    d={path}
-                    fill="none"
-                    className={style.stroke}
-                    strokeWidth={1.75}
-                    strokeDasharray={edge.style === 'dashed' ? '6 4' : undefined}
-                    markerEnd={`url(#${style.markerId})`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.35 + laidOutNodes.length * 0.05 + i * 0.06, duration: 0.4 }}
-                  />
-                  {chipRect && (
-                    <foreignObject x={chipRect.x} y={chipRect.y} width={chipRect.w} height={chipRect.h} style={{ overflow: 'visible' }}>
-                      <motion.div
-                        className="w-full h-full flex items-center justify-center pointer-events-none"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.45 + laidOutNodes.length * 0.05 + i * 0.06, duration: 0.3 }}
-                      >
-                        <span
-                          className={`px-2 py-0.5 border text-[9px] font-semibold shadow-xs ${
-                            chipRect.wrap ? 'rounded-lg leading-tight text-center' : 'rounded-full leading-none whitespace-nowrap'
-                          } ${style.chipClass}`}
-                        >
-                          {chipText}
-                        </span>
-                      </motion.div>
-                    </foreignObject>
-                  )}
-                </g>
+                <motion.path
+                  key={edge.id}
+                  d={path}
+                  fill="none"
+                  className={style.stroke}
+                  strokeWidth={1.75}
+                  strokeDasharray={edge.style === 'dashed' ? '6 4' : undefined}
+                  markerEnd={`url(#${style.markerId})`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.35 + laidOutNodes.length * 0.05 + i * 0.06, duration: 0.4 }}
+                />
               );
             })}
 
@@ -429,6 +462,46 @@ export const ConceptMapDiagram: React.FC<ConceptMapDiagramProps> = ({ title, des
                         {node.note && <span className="ml-1 opacity-60">*</span>}
                       </span>
                     </div>
+                  </motion.div>
+                </foreignObject>
+              );
+            })}
+
+            {/* Edge-label chips — topmost layer: a label must never be
+                occluded by a node it unavoidably overhangs (chips already
+                try to avoid nodes, but a pill wider than its corridor has
+                to graze one, and the label wins that fight). */}
+            {validEdges.map((edge, i) => {
+              const style = EDGE_STYLE[edge.sign];
+              const chipRect = chipRectByEdgeId.get(edge.id);
+              if (!chipRect) return null;
+              const chipText = edge.label ? `${style.icon}${edge.label}` : style.icon.trim();
+              return (
+                <foreignObject
+                  key={`chip-${edge.id}`}
+                  x={chipRect.x}
+                  y={chipRect.y}
+                  width={chipRect.w}
+                  height={chipRect.h}
+                  style={{ overflow: 'visible' }}
+                >
+                  <motion.div
+                    className="w-full h-full flex items-center justify-center pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.45 + laidOutNodes.length * 0.05 + i * 0.06, duration: 0.3 }}
+                  >
+                    <span
+                      className={`border font-semibold shadow-xs ${
+                        chipRect.size === 'wrap'
+                          ? 'px-1.5 py-0.5 rounded-lg text-[8px] leading-tight text-center'
+                          : chipRect.size === 'small'
+                            ? 'px-1.5 py-0.5 rounded-full text-[8px] leading-none whitespace-nowrap'
+                            : 'px-2 py-0.5 rounded-full text-[9px] leading-none whitespace-nowrap'
+                      } ${style.chipClass}`}
+                    >
+                      {chipText}
+                    </span>
                   </motion.div>
                 </foreignObject>
               );
