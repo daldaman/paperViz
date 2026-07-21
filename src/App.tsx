@@ -9,7 +9,8 @@
 import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { papers } from './content/loader';
-import { PaperContentSchema, type PaperContent } from './content/schema';
+import type { PaperContent } from './content/schema';
+import { loadOverlay, saveOverlay, clearOverlay, clearLegacyStorage } from './content/storage';
 import { ThemeProvider } from './theme/ThemeProvider';
 import { useTheme } from './theme/useTheme';
 import { Nav } from './sections/Nav';
@@ -21,32 +22,16 @@ import { CustomizerPanel } from './customizer/CustomizerPanel';
 import { updateAtPath, type PathSegment } from './customizer/updateAtPath';
 import { FigureRenderProvider } from './figures/FigureRenderContext';
 
-const STORAGE_KEY = 'academic_paper_data';
+// Still a literal here (not yet read from the URL) — Phase 6 wires this up
+// to `?paper=<slug>` routing. Everything downstream (storage.ts,
+// CustomizerPanel/EmbedTab/ContentTab) already takes slug as a parameter,
+// so Phase 6 only needs to change this one line.
 const PAPER_SLUG = 'alphaqubit';
 
 function loadInitialContent(): PaperContent | undefined {
+  clearLegacyStorage();
   const fallback = papers[PAPER_SLUG];
-
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      const result = PaperContentSchema.safeParse(parsed);
-      if (result.success) {
-        return result.data;
-      }
-      console.info(
-        '[paperViz] Stored customization at localStorage key "academic_paper_data" no longer matches the PaperContent schema (likely the old flat PaperData shape) — clearing it and reloading from papers/alphaqubit.json.',
-        result.error.issues,
-      );
-      localStorage.removeItem(STORAGE_KEY);
-    }
-  } catch (e) {
-    console.error(e);
-    localStorage.removeItem(STORAGE_KEY);
-  }
-
-  return fallback;
+  return loadOverlay(PAPER_SLUG) ?? fallback;
 }
 
 const EmbedBadge: React.FC = () => {
@@ -83,26 +68,23 @@ const AppShell: React.FC = () => {
   const [content, setContent] = useState<PaperContent | undefined>(loadInitialContent);
   const [panelOpen, setPanelOpen] = useState(false);
 
+  // An empty path replaces the whole tree (updateAtPath's base case) — this
+  // is also how JsonImportExport's successful import path works
+  // (ContentTab calls `updateField([], parsedContent)`), so both a single
+  // field edit and a full-document import flow through the exact same
+  // persist-then-render path.
   const updateField = (path: PathSegment[], value: unknown) => {
     setContent((prev) => {
       if (!prev) return prev;
       const next = updateAtPath(prev, path, value);
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      } catch (e) {
-        console.error(e);
-      }
+      saveOverlay(PAPER_SLUG, next);
       return next;
     });
   };
 
   const resetContent = () => {
     setContent(papers[PAPER_SLUG]);
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (e) {
-      console.error(e);
-    }
+    clearOverlay(PAPER_SLUG);
   };
 
   if (!content) {
@@ -132,6 +114,7 @@ const AppShell: React.FC = () => {
 
       <CustomizerPanel
         content={content}
+        slug={PAPER_SLUG}
         updateField={updateField}
         resetContent={resetContent}
         open={panelOpen}
