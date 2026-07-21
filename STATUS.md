@@ -1,6 +1,6 @@
 # paperViz — STATUS
 
-**Phase:** active (Phase 5 complete)
+**Phase:** active (Phase 6 complete)
 **Last updated:** 2026-07-20
 
 ## Current state
@@ -16,10 +16,15 @@
 - `EmbedTab.tsx`: embed URL + iframe snippet gain `&paper=<slug>`; the unused `allow="geolocation; microphone; camera"` attribute is gone.
 - Full browser verification passed against the running dev server (live meta/paragraph edits, add/remove author, section reorder+revert, figures[].props JSON sub-editor, export/paste-import round-trip as a true no-op, broken-JSON and malformed-JSON-syntax paste both showing legible errors without harming the app, per-slug persistence across reload with the legacy key confirmed gone, embed URL/snippet content). Content reset to pristine AlphaQubit and localStorage cleared afterward.
 - `npm run build` and `npm run typecheck` both clean.
+- Phase 6 complete: `src/App.tsx`'s `AppRouter` reads `?paper=<slug>` synchronously (lazy `useState` initializer, no flash) against the `papers` registry — known slug (incl. "_"-prefixed dev fixtures) renders `PaperSite` (the renamed, now-parameterized former `AppShell`, `slug` threaded as a prop instead of the old hardcoded `PAPER_SLUG` literal); miss/no-param and unknown-slug (+ `console.warn`) both fall back to the gallery. No path router — every nav is a full page load with a query string, so GitHub Pages never sees a nested path to 404 on.
+- NEW `src/gallery/Gallery.tsx`: minimal standalone themed grid over `listPapers()` — per card title/subtitle/venue•date/clamped description, linking to `?paper=<slug>` while preserving any `theme`/`font*` query params already on the URL. No Nav/Hero/Footer/CustomizerPanel FAB, no search/filter/tags (out of v1 scope). Wrapped in the same top-level `ThemeProvider` as paper pages, so `?theme=`/`?font=` work on the gallery itself too.
+- Dynamic `document.title`: paper pages set `${meta.title} — ${meta.subtitle}` (live-updates on customizer edits); gallery sets `"paperViz — Interactive Paper Sites"`. `index.html`'s static `<title>` is now just the pre-hydration fallback (`"paperViz"`).
+- Browser-verified all Phase 6 acceptance scenarios against the running dev server: `/` (gallery, alphaqubit-only, correct title) → click card → full AlphaQubit site (correct title); `?paper=_preview` (fixture renders); `?paper=nonsense` (gallery + console.warn); `?paper=alphaqubit&theme=cosmic&embed=true` (theme + embed pill together); `/?theme=cosmic&font-heading=Lora` (gallery itself themed, card href preserves both params, confirmed via DOM).
+- `npm run build` and `npm run typecheck` both clean.
 
 ## Blockers
 - None.
 
 ## Next steps
-- Phase 6: multi-paper routing + gallery — `?paper=<slug>` (URLSearchParams) drives the glob registry lookup that `PAPER_SLUG` currently hardcodes in `App.tsx`; miss/no-param falls back to a minimal `Gallery.tsx` grid. No path router, so no GH Pages SPA-404 problem.
+- Phase 7: pilot paper content (WFH and Bank Efficiency, SSRN 6973859) — `scripts/extract_figures.py` crib of Fig 1, `papers/wfh-bank-efficiency.json` (prose + static Fig 1 + event-study-explorer rebuild + grouped-bar from Table 3/4 + concept-map mechanism). Numbers policy: real replication-output coefficients/CIs from David only, never eyeballed off the published figure; mark "stylized" if unavailable.
 - Full phase list: `tasks/todo.md`.
