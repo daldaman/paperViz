@@ -91,12 +91,13 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - [x] Prep: `src/figures/CoefficientBar.tsx` added (registered `coefficient-bar`) — themed SVG diverging grouped bar chart for signed regression coefficients (categories = outcome variables, series = horizons), zero-anchored bars via `<path>` (rounded data-end, square baseline), significance stars from p-values + exact p in tooltip, table-view twin. For the Table 3/4 pilot exhibit, prefer `coefficient-bar` over `grouped-bar` wherever the underlying estimates are signed/can be negative — `grouped-bar` assumes non-negative magnitudes. Demo data in `papers/_preview.json` (`coefficient-bar-fig`); browser-verified in gold-cream + cosmic-slate.
 
 ## Phase 8 — Deploy
-- [ ] `vite.config.ts` base: `/paperViz/` on build, `/` in dev
-- [ ] `.github/workflows/deploy.yml` (checkout → setup-node 20 → npm ci → typecheck → build → upload/deploy Pages)
-- [ ] One-time manual: create public repo `daldaman/paperViz`, enable Pages (Source=GitHub Actions)
-- [ ] Verify: local build+preview under base path; live iframe embed test (both papers)
+- [x] `vite.config.ts` base: `/paperViz/` on build, `/` in dev
+- [x] `.github/workflows/deploy.yml` (checkout → setup-node 20 → npm ci → typecheck → build → upload/deploy Pages)
+- [x] One-time manual: create public repo `daldaman/paperViz`, enable Pages (Source=GitHub Actions)
+- [x] Verify: local build+preview under base path; live iframe embed test (both papers) — cross-origin iframe with `embed=true&hide-customizer=true` passed against the deployed site
+- **Live:** `https://daldaman.github.io/paperViz/` (gallery), `?paper=alphaqubit`, `?paper=wfh-bank-efficiency`
 
 ## Phase 9 — Docs finalization
-- [ ] STATUS.md → active; taxonomy status → active
-- [ ] MEMORY.md architecture + key-decisions log refreshed
-- [ ] tasks/lessons.md for anything that bit; refresh `inventories/pvz.md`
+- [x] STATUS.md → active; taxonomy status → active
+- [x] MEMORY.md architecture + key-decisions log refreshed
+- [x] `tasks/lessons.md` reviewed (no new lesson from this phase — docs-only); `inventories/pvz.md` refreshed
