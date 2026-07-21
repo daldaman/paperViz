@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "title": "Cheaper to Run, Harder to Earn",
+    "subtitle": "Working From Home and Bank Efficiency",
+    "venue": "SSRN Working Paper",
+    "publishDate": "June 2026",
+    "description": "The first systematic evidence on how the shift to remote work affects U.S. bank efficiency: cost gains and revenue losses arrive on the same delayed timetable — and land on different banks.",
+    "links": [
+      {
+        "label": "Read on SSRN",
+        "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6973859"
+      }
+    ],
+    "heroScene": "abstract-network"
+  },
+  "sections": [
+    {
+      "id": "introduction",
+      "navLabel": "Introduction",
+      "title": "Banking's Remote-Work Question",
+      "dropcap": true,
+      "layout": "prose",
+      "body": [
+        "Few industries have been as exposed to the rise of remote work as banking. Finance ranks among the most teleworkable sectors of the U.S. economy, and the shift that began as a pandemic necessity has persisted long after offices reopened. Yet whether the transformation helps or harms banks remains deeply contested: some of the industry's most prominent executives have ordered their entire workforce back to the office five days a week, while others made permanent flexibility a recruiting pitch.",
+        "This paper provides the first systematic evidence on how the shift to working from home affects bank efficiency. The answer is two-sided by design: remote work makes banks cheaper to run — and harder to earn in."
+      ]
+    },
+    {
+      "id": "design",
+      "navLabel": "Design",
+      "eyebrow": "THE DESIGN",
+      "title": "Two Channels of Exposure",
+      "layout": "prose",
+      "body": [
+        "Measuring a bank's exposure to remote work requires separating who does the banking from where the banking is done. Staff WFH exposure captures the work-from-home rate of finance-industry workers across the markets in which a bank operated before the pandemic, averaged using its 2019 branch shares. Local WFH exposure instead captures how strongly the bank's local markets as a whole shifted to remote work, built from 2019 industry composition and national leave-one-out remote-work rates.",
+        "The outcomes are cost, revenue, and profit efficiency ranks estimated from stochastic frontiers, for an unbalanced panel of 214 U.S. bank holding companies over 2020:Q3–2024:Q4. All exposure weights are fixed at their pre-pandemic values, so that exposure cannot itself be an outcome of remote work."
+      ]
+    },
+    {
+      "id": "results",
+      "navLabel": "Results",
+      "eyebrow": "THE RESULTS",
+      "title": "A Delayed Trade-off",
+      "layout": "figure-below",
+      "figureId": "table3-coefficients",
+      "body": [
+        "One quarter out, little happens: staff exposure leaves cost, revenue, and profit efficiency statistically close to flat. Four quarters out, the ledger splits. Banks with greater staff WFH exposure climb the cost-efficiency distribution and slide down the revenue-efficiency distribution by roughly offsetting amounts — leaving profit efficiency unchanged.",
+        "The magnitudes are deliberately modest, and the pattern — not any single coefficient — carries the argument: it holds across horizons, specifications, and fixed-effects structures."
+      ]
+    },
+    {
+      "id": "dynamics",
+      "inNav": false,
+      "title": "The Adjustment Path",
+      "layout": "figure-below",
+      "figureId": "figure1-static",
+      "body": [
+        "Local projections trace the full adjustment quarter by quarter. Cost-efficiency gains from staff exposure emerge roughly one year out and persist; revenue-efficiency losses build on the same timetable. Local exposure operates separately — and, on revenue, in the opposite direction, benefiting banks whose markets proved resilient to the remote-work transition."
+      ]
+    },
+    {
+      "id": "mechanisms",
+      "navLabel": "Mechanisms",
+      "eyebrow": "THE MECHANISMS",
+      "title": "Who Gains, and Who Loses",
+      "layout": "figure-below",
+      "figureId": "mechanism-map",
+      "body": [
+        "The two staff effects carry testable cross-sectional predictions, and the data deliver them where — and only where — the mechanisms say they should. Cost gains concentrate in banks that entered the pandemic with a footprint to rationalize: high occupancy expense, dense branch networks, substantial data-processing operations. Revenue losses concentrate in banks whose income depends on soft information and high-touch service — small-business and commercial lending, deposit account services.",
+        "Placebo moderators behave like placebos. Salaries on the cost side, and fiduciary and trading income on the revenue side, show no differential effect: hard-information, arm's-length businesses have little to lose from distance."
+      ]
+    },
+    {
+      "id": "impact",
+      "navLabel": "Implications",
+      "title": "Not a Facilities Decision",
+      "tone": "inverse",
+      "layout": "prose",
+      "body": [
+        "For bank managers, remote-work policy is not a facilities decision. The cost savings are real, but they accrue mainly to banks with substantial overhead to rationalize — while the revenue costs fall on precisely the business models whose value is hardest to see in quarterly accounts.",
+        "For supervisors, the aggregate null on profit efficiency is close to zero by construction, not by absence of effects: remote work shifts the composition of bank production, and each bank's exposure to that shift is its own."
+      ],
+      "quote": {
+        "text": "A bank deciding how much of its workforce to bring back to the office should weigh its own position on both margins rather than the industry average.",
+        "author": "— Aldama-Navarrete, Alexander & Curti (2026)"
+      }
+    }
+  ],
+  "figures": [
+    {
+      "kind": "interactive",
+      "id": "table3-coefficients",
+      "component": "coefficient-bar",
+      "title": "Staff WFH Exposure and Bank Efficiency",
+      "description": "Coefficients from panel regressions of one- and four-quarter-ahead efficiency percentile ranks on staff WFH exposure, full fixed-effects specification (bank, quarter, and state fixed effects; Table 3, columns 4 and 8). Standard errors two-way clustered by bank and quarter.",
+      "props": {
+        "metricLabel": "Effect on within-quarter efficiency percentile rank",
+        "note": "N = 3,254 (1Q ahead) / 2,760 (4Q ahead) bank-quarter observations; 214 BHCs, 2020:Q3–2024:Q4.",
+        "categories": [
+          { "id": "cost", "label": "Cost efficiency" },
+          { "id": "revenue", "label": "Revenue efficiency" },
+          { "id": "profit", "label": "Profit efficiency" }
+        ],
+        "series": [
+          {
+            "id": "q1",
+            "label": "1 quarter ahead",
+            "values": {
+              "cost": { "est": -0.086, "p": 0.06 },
+              "revenue": { "est": 0.027, "p": 0.501 },
+              "profit": { "est": -0.012, "p": 0.795 }
+            }
+          },
+          {
+            "id": "q4",
+            "label": "4 quarters ahead",
+            "values": {
+              "cost": { "est": 0.101, "p": 0.04 },
+              "revenue": { "est": -0.095, "p": 0.019 },
+              "profit": { "est": 0.032, "p": 0.479 }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "static",
+      "id": "figure1-static",
+      "src": "fig1-dynamic-effects.png",
+      "alt": "Four-panel local-projections figure showing the dynamic effects of staff and local WFH exposure on cost and revenue efficiency over horizons of zero to six quarters, with shaded confidence bands.",
+      "caption": "Dynamic effects of WFH exposure on bank efficiency. Local-projection coefficients at horizons of 0–6 quarters; shaded bands denote confidence intervals.",
+      "credit": "Source: Aldama-Navarrete, Alexander & Curti (2026), Figure 1."
+    },
+    {
+      "kind": "diagram",
+      "id": "mechanism-map",
+      "title": "The Composition Shift",
+      "description": "How staff WFH exposure reshapes bank production: offsetting margins, moderated by pre-pandemic bank characteristics.",
+      "spec": {
+        "nodes": [
+          { "id": "wfh", "label": "Staff WFH exposure", "type": "driver", "column": 0, "row": 1, "note": "2019 branch-weighted" },
+          { "id": "footprint", "label": "Large physical & tech footprint", "type": "moderator", "column": 0, "row": 0 },
+          { "id": "relationship", "label": "Relationship-intensive business", "type": "moderator", "column": 0, "row": 2 },
+          { "id": "cost", "label": "Cost efficiency ↑", "type": "mechanism", "column": 1, "row": 0, "note": "~1-year delay" },
+          { "id": "revenue", "label": "Revenue efficiency ↓", "type": "mechanism", "column": 1, "row": 2, "note": "~1-year delay" },
+          { "id": "profit", "label": "Profit efficiency ≈ unchanged", "type": "outcome", "column": 2, "row": 1 }
+        ],
+        "edges": [
+          { "id": "e1", "from": "wfh", "to": "cost", "sign": "positive", "label": "overhead savings" },
+          { "id": "e2", "from": "wfh", "to": "revenue", "sign": "negative", "label": "soft-information erosion" },
+          { "id": "e3", "from": "cost", "to": "profit", "sign": "neutral" },
+          { "id": "e4", "from": "revenue", "to": "profit", "sign": "neutral" },
+          { "id": "e5", "from": "footprint", "to": "cost", "sign": "positive", "style": "dashed", "label": "amplifies" },
+          { "id": "e6", "from": "relationship", "to": "revenue", "sign": "negative", "style": "dashed", "label": "amplifies" }
+        ],
+        "layout": { "columns": 3 }
+      }
+    }
+  ],
+  "authors": {
+    "eyebrow": "AUTHORS",
+    "heading": "The Research Team",
+    "subheading": "Quantitative Supervision & Research, Federal Reserve Bank of Richmond",
+    "list": [
+      { "name": "David Aldama-Navarrete", "role": "Federal Reserve Bank of Richmond" },
+      { "name": "Bryson Alexander", "role": "Federal Reserve Bank of Richmond" },
+      { "name": "Filippo Curti", "role": "Federal Reserve Bank of Richmond" }
+    ],
+    "footnote": "With thanks to Patrick deFontnouvelle, Anne Hansen, Anya Kleymenova, Fabrizio Marodin, and Ping McLemore for valuable feedback."
+  },
+  "footer": {
+    "blurb": "Working paper, June 2026 (SSRN 6973859). The views expressed are those of the authors and do not necessarily reflect the views of the Federal Reserve Bank of Richmond or the Federal Reserve System.",
+    "tagline": "Built with paperViz."
+  }
+}

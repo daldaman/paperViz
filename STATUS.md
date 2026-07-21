@@ -1,6 +1,6 @@
 # paperViz — STATUS
 
-**Phase:** active (Phase 6 complete)
+**Phase:** active (Phase 7 complete)
 **Last updated:** 2026-07-20
 
 ## Current state
@@ -22,9 +22,17 @@
 - Browser-verified all Phase 6 acceptance scenarios against the running dev server: `/` (gallery, alphaqubit-only, correct title) → click card → full AlphaQubit site (correct title); `?paper=_preview` (fixture renders); `?paper=nonsense` (gallery + console.warn); `?paper=alphaqubit&theme=cosmic&embed=true` (theme + embed pill together); `/?theme=cosmic&font-heading=Lora` (gallery itself themed, card href preserves both params, confirmed via DOM).
 - `npm run build` and `npm run typecheck` both clean.
 
+## Current state (Phase 7)
+- Pilot paper live at `?paper=wfh-bank-efficiency`: "Cheaper to Run, Harder to Earn" (Aldama-Navarrete, Alexander & Curti; SSRN 6973859). Six prose sections, `coefficient-bar` figure with real Table 3 estimates (cols. 4 & 8, transcribed from the printed table — policy-compliant), static Figure 1 cribbed at native resolution (embedded-image extraction, not a render crop), concept-map mechanism diagram, abstract-network hero, Fed disclaimer in the footer.
+- NEW `src/figures/CoefficientBar.tsx` ('coefficient-bar'): diverging grouped bar for signed estimates with p-value stars — built because `InteractiveGroupedBar` assumes non-negative values.
+- NEW `scripts/extract_figures.py`: reusable PyMuPDF extraction tool (embedded-image mode + render-crop mode + `--probe`).
+- Fixed `ProseSection`: `tone: 'inverse'` is now orthogonal to `layout` (shared `INVERSE_SECTION_CLASS` + `InverseGlow`; `QuoteBlock` gained an `inverse` variant). Previously only `figure-left` had a dark branch, so the pilot's `prose`+`inverse` impact section rendered broken. AlphaQubit regression-checked after the fix.
+- DELIBERATE OMISSION: no interactive event-study rebuild of Figure 1 yet — its underlying coefficients are not tabulated in the paper, and the numbers policy forbids eyeballing them off the image. Waiting on replication output (see Blockers); the static crib covers the dynamics section meanwhile.
+
 ## Blockers
-- None.
+- Interactive event-study for the pilot needs the Figure 1 replication output (coefficients + CI bounds per horizon, 4 panels) from David.
 
 ## Next steps
-- Phase 7: pilot paper content (WFH and Bank Efficiency, SSRN 6973859) — `scripts/extract_figures.py` crib of Fig 1, `papers/wfh-bank-efficiency.json` (prose + static Fig 1 + event-study-explorer rebuild + grouped-bar from Table 3/4 + concept-map mechanism). Numbers policy: real replication-output coefficients/CIs from David only, never eyeballed off the published figure; mark "stylized" if unavailable.
+- Phase 8: GitHub Pages deploy — vite `base`, Actions workflow, create PUBLIC repo `daldaman/paperViz`, push, enable Pages, iframe embed test. Gated on David's explicit go-ahead (public release).
+- Phase 9: docs finalization (taxonomy status flip, inventories refresh, MEMORY.md decisions log).
 - Full phase list: `tasks/todo.md`.
