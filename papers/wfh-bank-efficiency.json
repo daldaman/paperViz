@@ -147,7 +147,7 @@
         ],
         "edges": [
           { "id": "e1", "from": "wfh", "to": "cost", "sign": "positive", "label": "overhead savings" },
-          { "id": "e2", "from": "wfh", "to": "revenue", "sign": "negative", "label": "soft-information erosion" },
+          { "id": "e2", "from": "wfh", "to": "revenue", "sign": "negative", "label": "soft-information erosion", "labelSide": "below" },
           { "id": "e3", "from": "cost", "to": "profit", "sign": "neutral" },
           { "id": "e4", "from": "revenue", "to": "profit", "sign": "neutral" },
           { "id": "e5", "from": "footprint", "to": "cost", "sign": "positive", "style": "dashed", "label": "amplifies" },

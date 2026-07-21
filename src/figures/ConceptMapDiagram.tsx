@@ -116,6 +116,11 @@ function cubicTangent(t: number, p0: number, p1: number, p2: number, p3: number)
 
 const CHIP_T_CANDIDATES = [0.5, 0.4, 0.6, 0.3, 0.7, 0.22, 0.78];
 const CHIP_NORMAL_OFFSETS = [0, -16, 16, -26, 26, -36, 36];
+// Author-pinned label sides (edge.labelSide). For the left-to-right edges a
+// column layout produces, a POSITIVE normal offset is visually BELOW the
+// line (SVG y grows downward and the normal is the tangent rotated +90°).
+const CHIP_OFFSETS_BELOW = [10, 16, 26, 36];
+const CHIP_OFFSETS_ABOVE = [-10, -16, -26, -36];
 // Size ladder for labels. Thin single-line pills are the most dodge-able
 // shape in a tight corridor (a tall wrapped box can't get off a line no
 // matter where it slides), so: normal 9px pill → small 8px pill for
@@ -157,6 +162,7 @@ function placeChip(
   chipObstacles: Rect[],
   curves: CurveSamples,
   bounds: { width: number; height: number },
+  allowedOffsets: number[] = CHIP_NORMAL_OFFSETS,
 ): Rect {
   const { sx, sy, c1x, c1y, c2x, c2y, tx, ty } = bezier;
   let best: Rect | null = null;
@@ -171,7 +177,7 @@ function placeChip(
     const nx = -dyT / len;
     const ny = dxT / len;
 
-    for (const off of CHIP_NORMAL_OFFSETS) {
+    for (const off of allowedOffsets) {
       const cx = px + nx * off;
       const cy = py + ny * off;
       const rect: Rect = { x: cx - chipW / 2, y: cy - chipH / 2, w: chipW, h: chipH };
@@ -196,8 +202,14 @@ function placeChip(
       const ownCovered = curves.own.reduce((n, p) => n + (pointInRect(p, rect) ? 1 : 0), 0);
       if (ownCovered > 2) score += (ownCovered - 2) * 1.4;
       // Blanketing a NEIGHBORING line is worse — there's no "this is my
-      // label" excuse.
-      score += curves.others.reduce((n, p) => n + (pointInRect(p, rect) ? 2 : 0), 0);
+      // label" excuse. And even sitting NEAR a foreign line muddies which
+      // edge the label belongs to, so proximity (within ~12px of the chip)
+      // carries a softer penalty: association clarity, not just collision.
+      const nearRect: Rect = { x: rect.x - 12, y: rect.y - 12, w: rect.w + 24, h: rect.h + 24 };
+      for (const p of curves.others) {
+        if (pointInRect(p, rect)) score += 2;
+        else if (pointInRect(p, nearRect)) score += 0.6;
+      }
       // Stay inside the drawing.
       if (rect.x < 2 || rect.y < 2 || rect.x + rect.w > bounds.width - 2 || rect.y + rect.h > bounds.height - 2) score += 6;
       // Prefer the canonical on-curve midpoint.
@@ -369,7 +381,9 @@ export const ConceptMapDiagram: React.FC<ConceptMapDiagramProps> = ({ title, des
       const chipText = edge.label ? `${style.icon}${edge.label}` : style.icon.trim();
       const dims = chipDims(chipText);
       const others = sampled.filter((s) => s.edge.id !== edge.id).flatMap((s) => s.points);
-      const rect = placeChip(bez, dims.w, dims.h, obstacles, placedChips, { own: points, others }, { width, height });
+      const allowedOffsets =
+        edge.labelSide === 'below' ? CHIP_OFFSETS_BELOW : edge.labelSide === 'above' ? CHIP_OFFSETS_ABOVE : CHIP_NORMAL_OFFSETS;
+      const rect = placeChip(bez, dims.w, dims.h, obstacles, placedChips, { own: points, others }, { width, height }, allowedOffsets);
       placedChips.push(rect);
       rects.set(edge.id, { ...rect, size: dims.size });
     });

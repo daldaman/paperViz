@@ -145,6 +145,10 @@ export const ConceptEdgeSchema = z.object({
   sign: z.enum(CONCEPT_EDGE_SIGNS).describe('Sign of the relationship, drives edge styling'),
   label: z.string().optional().describe('Optional label rendered along the edge'),
   style: z.enum(['solid', 'dashed']).default('solid').describe('Edge line style'),
+  labelSide: z
+    .enum(['auto', 'above', 'below'])
+    .default('auto')
+    .describe('Which side of the edge the label sits on (auto = collision-based placement)'),
 });
 export type ConceptEdge = z.infer<typeof ConceptEdgeSchema>;
 
