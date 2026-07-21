@@ -86,6 +86,7 @@ export type ProseSection = z.infer<typeof ProseSectionSchema>;
 export const INTERACTIVE_COMPONENTS = [
   'grouped-bar',
   'event-study-explorer',
+  'coefficient-bar',
   'surface-code',
   'transformer-decoder',
   'quantum-computer-scene',

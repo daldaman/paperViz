@@ -85,6 +85,7 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - [ ] `scripts/extract_figures.py` (anaconda python, PyMuPDF) → `public/papers/wfh-bank-efficiency/fig1-event-study.png`
 - [ ] `papers/wfh-bank-efficiency.json`: prose sections, static Fig 1 crib, event-study-explorer rebuild, grouped-bar (Table 3/4), concept-map mechanism
 - [ ] Numbers policy: get replication-output coefficients/CIs from David — never eyeball off the published figure; mark "stylized" if unavailable
+- [x] Prep: `src/figures/CoefficientBar.tsx` added (registered `coefficient-bar`) — themed SVG diverging grouped bar chart for signed regression coefficients (categories = outcome variables, series = horizons), zero-anchored bars via `<path>` (rounded data-end, square baseline), significance stars from p-values + exact p in tooltip, table-view twin. For the Table 3/4 pilot exhibit, prefer `coefficient-bar` over `grouped-bar` wherever the underlying estimates are signed/can be negative — `grouped-bar` assumes non-negative magnitudes. Demo data in `papers/_preview.json` (`coefficient-bar-fig`); browser-verified in gold-cream + cosmic-slate.
 
 ## Phase 8 — Deploy
 - [ ] `vite.config.ts` base: `/paperViz/` on build, `/` in dev

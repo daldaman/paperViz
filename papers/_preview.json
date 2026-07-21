@@ -4,7 +4,7 @@
     "subtitle": "Dev-only kitchen sink for every figure kind",
     "venue": "Internal",
     "publishDate": "Jul 2026",
-    "description": "A dev-only content fixture exercising every registered figure kind — static image + lightbox, event-study explorer, concept map, and interactive grouped bar — plus the abstract-network hero scene. Excluded from listPapers() via the \"_\" slug prefix, so it never appears in the future gallery.",
+    "description": "A dev-only content fixture exercising every registered figure kind — static image + lightbox, event-study explorer, concept map, interactive grouped bar, and diverging coefficient bar — plus the abstract-network hero scene. Excluded from listPapers() via the \"_\" slug prefix, so it never appears in the future gallery.",
     "links": [
       { "label": "paperViz repo", "url": "https://github.com/daldaman/paperViz" }
     ],
@@ -73,6 +73,19 @@
       "figureId": "grouped-bar-fig",
       "body": [
         "InteractiveGroupedBar (renamed from PerformanceMetricDiagram in Phase 4) is category-switchable and validated against a registered props schema in the loader — categories and series both require at least one entry."
+      ]
+    },
+    {
+      "id": "coefficient-bar",
+      "navLabel": "Coefficient Bar",
+      "inNav": true,
+      "eyebrow": "RESULTS",
+      "title": "Diverging Coefficient Bar",
+      "layout": "figure-below",
+      "tone": "default",
+      "figureId": "coefficient-bar-fig",
+      "body": [
+        "CoefficientBar renders signed panel-regression coefficients as a grouped diverging bar chart around a zero baseline — categories are outcome variables, series are horizons. Negative estimates extend below the baseline; significance stars are derived from each cell's p-value and the exact p rides the hover/focus tooltip."
       ]
     }
   ],
@@ -155,6 +168,42 @@
         "series": [
           { "id": "pre", "label": "Pre-Period", "values": { "branch": 1.8, "digital": 1.2, "hybrid": 1.5 } },
           { "id": "post", "label": "Post-Period", "values": { "branch": 1.6, "digital": 2.1, "hybrid": 2.4 } }
+        ]
+      }
+    },
+    {
+      "kind": "interactive",
+      "id": "coefficient-bar-fig",
+      "component": "coefficient-bar",
+      "title": "Effect of WFH Adoption on Efficiency Percentile Rank (Stylized)",
+      "description": "Signed coefficients by outcome and horizon, with 95% conventional significance stars.",
+      "props": {
+        "metricLabel": "Effect on efficiency percentile rank (pp)",
+        "note": "Full fixed-effects specification (Table 3, cols. 4 & 8). p-values in tooltips. Stylized preview data — not estimated from the paper's replication files.",
+        "categories": [
+          { "id": "cost", "label": "Cost efficiency" },
+          { "id": "revenue", "label": "Revenue efficiency" },
+          { "id": "profit", "label": "Profit efficiency" }
+        ],
+        "series": [
+          {
+            "id": "h1",
+            "label": "1 quarter ahead",
+            "values": {
+              "cost": { "est": 0.101, "p": 0.04 },
+              "revenue": { "est": -0.095, "p": 0.061 },
+              "profit": { "est": 0.006, "p": 0.87 }
+            }
+          },
+          {
+            "id": "h4",
+            "label": "4 quarters ahead",
+            "values": {
+              "cost": { "est": 0.187, "p": 0.008 },
+              "revenue": { "est": -0.142, "p": 0.023 },
+              "profit": { "est": 0.045, "p": 0.41 }
+            }
+          }
         ]
       }
     }

@@ -26,6 +26,7 @@ import { TransformerDecoderDiagram } from './quantum/TransformerDecoderDiagram';
 import { QuantumComputerScene } from './quantum/QuantumScene';
 import { InteractiveGroupedBar, InteractiveGroupedBarPropsSchema } from './InteractiveGroupedBar';
 import { EventStudyExplorer, EventStudyExplorerPropsSchema } from './EventStudyExplorer';
+import { CoefficientBar, CoefficientBarPropsSchema } from './CoefficientBar';
 import { StaticFigure } from './StaticFigure';
 import { ConceptMapDiagram } from './ConceptMapDiagram';
 
@@ -76,6 +77,10 @@ export const INTERACTIVE_FIGURE_REGISTRY: Record<string, InteractiveRegistryEntr
   'event-study-explorer': {
     component: toRegistryComponent(EventStudyExplorer),
     propsSchema: EventStudyExplorerPropsSchema,
+  },
+  'coefficient-bar': {
+    component: toRegistryComponent(CoefficientBar),
+    propsSchema: CoefficientBarPropsSchema,
   },
   'quantum-computer-scene': { component: toRegistryComponent(QuantumComputerSceneFigure) },
 };
