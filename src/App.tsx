@@ -41,7 +41,15 @@ const EmbedBadge: React.FC = () => {
   const { embedMode, setEmbedMode } = useTheme();
   if (!embedMode) return null;
 
-  const currentBaseUrl = window.location.origin + window.location.pathname;
+  // Keep the full query string (paper slug, theme, fonts) so the new tab
+  // opens this exhibit as a full site — origin+pathname alone lands on the
+  // gallery. Only the embed-mode flags are stripped.
+  const fullSiteUrl = (() => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('embed');
+    url.searchParams.delete('hide-customizer');
+    return url.toString();
+  })();
 
   return (
     <div className="fixed top-4 left-4 z-40 bg-theme-card/85 backdrop-blur-md border border-theme-border rounded-full py-1.5 px-3.5 shadow-xs text-[11px] font-sans flex items-center gap-2">
@@ -55,7 +63,7 @@ const EmbedBadge: React.FC = () => {
         Show Full
       </button>
       <a
-        href={currentBaseUrl}
+        href={fullSiteUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="text-theme-muted hover:text-theme-main border-l border-theme-border pl-2 flex items-center gap-1"
