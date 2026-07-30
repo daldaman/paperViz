@@ -36,7 +36,8 @@ export const StaticFigure: React.FC<StaticFigureProps> = ({ figure }) => {
       <button
         type="button"
         onClick={() => setLightboxOpen(true)}
-        className="block w-full overflow-hidden rounded-xl border border-theme-border bg-theme-card cursor-zoom-in group"
+        className="block w-full mx-auto overflow-hidden rounded-xl border border-theme-border bg-theme-card cursor-zoom-in group"
+        style={figure.displayWidth ? { maxWidth: figure.displayWidth } : undefined}
         aria-label={`Open larger view of: ${figure.alt}`}
       >
         <img

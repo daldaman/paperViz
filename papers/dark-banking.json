@@ -104,6 +104,7 @@
       "kind": "static",
       "id": "fig1-map",
       "src": "fig1-cartel-expansion.png",
+      "displayWidth": 280,
       "alt": "Four maps of Mexico in 1995, 2000, 2005, and 2010, with municipalities shaded dark where at least one drug cartel is active, showing cartel activity spreading across the country over time.",
       "caption": "Geographic expansion of drug-cartel activity in Mexico, 1995–2010. Darkly shaded municipios have at least one active cartel; light shading signifies no data available.",
       "credit": "Source: Aldama-Navarrete (2021), Figure 1; underlying data from Coscia & Ríos (2012)."

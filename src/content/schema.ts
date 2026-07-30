@@ -119,6 +119,11 @@ export const StaticFigureSchema = z.object({
       message: 'src must be a path relative to public/papers/<slug>/ — no leading slash (use withBase() at render time)',
     })
     .describe('Image path relative to public/papers/<slug>/, no leading slash'),
+  displayWidth: z
+    .number()
+    .positive()
+    .optional()
+    .describe('Optional max display width in px — keeps low-resolution cribs near native size (lightbox unaffected)'),
   alt: z.string().min(1).describe('Accessible alt text'),
   caption: z.string().min(1).describe('Caption shown under the image'),
   credit: z.string().optional().describe('Optional attribution / source credit line'),
