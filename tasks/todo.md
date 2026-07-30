@@ -101,3 +101,13 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - [x] STATUS.md → active; taxonomy status → active
 - [x] MEMORY.md architecture + key-decisions log refreshed
 - [x] `tasks/lessons.md` reviewed (no new lesson from this phase — docs-only); `inventories/pvz.md` refreshed
+
+## Dark Banking onboarding (2026-07-30)
+- [x] Full local PDF verified complete (63 pp.; bypassed Read tool's false password-protected error via PyMuPDF)
+- [x] Assets: `fig1-cartel-expansion.png` (native embedded image, p49), `fig3-event-time.png` (two embedded panels stacked via PIL, p51), whitespace-trimmed
+- [x] Table 2 p39 rendered and inspected: printed Panels B/C are typo'd (identical blocks, swapped headers) → David chose deposits-only coefficient exhibit; B/C described qualitatively
+- [x] `papers/dark-banking.json`: 7 sections, 5 figures (coefficient-bar Table 2A, static Fig 1 + Fig 3, event-study-explorer Table 6 col 2 w/ disclosed derived CIs, concept map), Fed disclaimer footer
+- [x] `EventStudyExplorer`: edge-aware reference-period annotation (leftmost reference clipped off-chart)
+- [x] Browser-verified all sections/figures in gold-cream + cosmic-slate, gallery (3 cards), embed mode; typecheck + build clean
+- [ ] Deploy (push pending David's confirmation) + live verification
+- [ ] Google Sites: new hub page, By-URL embed, theme chosen from live screenshots with David's OK before publish

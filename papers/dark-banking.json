@@ -1,0 +1,207 @@
+{
+  "meta": {
+    "title": "Dark Banking?",
+    "subtitle": "Banks and Illicit Deposit Flows",
+    "venue": "SSRN Working Paper",
+    "publishDate": "March 2021",
+    "description": "Do banks enable organized crime? Evidence from the Mexican drug trade shows that cartel entry causes a steep rise in local bank deposits — and that a 'law-and-order' crackdown pushed illicit liquidity across the border into U.S. banks.",
+    "links": [
+      {
+        "label": "Read on SSRN",
+        "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3811752"
+      }
+    ],
+    "heroScene": "abstract-network"
+  },
+  "sections": [
+    {
+      "id": "introduction",
+      "navLabel": "Introduction",
+      "title": "Do Banks Enable Organized Crime?",
+      "dropcap": true,
+      "layout": "prose",
+      "body": [
+        "Mexican drug cartels are the largest foreign suppliers of heroin, methamphetamine, and cocaine to the U.S. market, and the global illicit drug trade has been estimated at 1.5% of world GDP. Yet the academic finance literature is all but silent on money laundering and the transmission of illicit financial flows. Do banks profit from receiving deposits from criminal organizations? Do existing regulatory controls succeed in insulating financial intermediation from organized crime?",
+        "This paper takes those questions to data, using the illegal drug trade in Mexico as an empirical laboratory. The answer it returns is uncomfortable: where cartels go, deposits follow — and when one country cracks down, the money simply crosses the border."
+      ]
+    },
+    {
+      "id": "setting",
+      "navLabel": "Setting",
+      "eyebrow": "THE LABORATORY",
+      "title": "Two Decades of Cartel Expansion",
+      "layout": "figure-below",
+      "figureId": "fig1-map",
+      "body": [
+        "Between 1995 and 2010, drug-cartel activity spread from a handful of Mexican municipalities to much of the national territory. That staggered geographic expansion — municipality by municipality, year by year — provides the identifying variation: municipality and year fixed effects absorb permanent local differences and nationwide shocks, so treatment effects are read from within-municipality changes around local cartel entry.",
+        "The setting also supplies a regime change. In 2006, Mexico elected a right-wing 'law-and-order' government that involved the armed forces in policing and, from 2008 and 2010, layered on successively tighter anti-money-laundering restrictions on cash and dollar deposits."
+      ]
+    },
+    {
+      "id": "results",
+      "navLabel": "Results",
+      "eyebrow": "THE RESULTS",
+      "title": "Where Cartels Go, Deposits Follow",
+      "layout": "figure-below",
+      "figureId": "table2-deposits",
+      "body": [
+        "Cartel entry into a municipality causes a steep increase in bank deposits held locally — 0.29 to 0.34 log points across specifications, robust to municipal controls and to a continuous measure of cartel presence. Branch networks grow rapidly in affected areas, consistent with banks anticipating the future operations of crime syndicates.",
+        "Crucially, local lending contracts at the same time: the liquidity windfall is not an artifact of a local credit boom, and it is not recycled into local credit supply. Banks absorb the deposits — they do not lend them back into the communities the cartels operate in."
+      ]
+    },
+    {
+      "id": "dynamics",
+      "inNav": false,
+      "title": "No Pre-Trends, Sharp Onset",
+      "layout": "figure-below",
+      "figureId": "fig3-event-time",
+      "body": [
+        "In event time, estimated coefficients remain relatively flat before cartel activity begins and jump sharply around the year of initial entry — for deposits and for active branches alike. Formal placebo tests agree: pre-period dummies fail to load in every specification, and local economic conditions do not predict where cartels appear."
+      ]
+    },
+    {
+      "id": "crackdown",
+      "navLabel": "The Crackdown",
+      "eyebrow": "THE 2006 SHOCK",
+      "title": "Squeezed at Home, Surfacing at the Border",
+      "layout": "figure-below",
+      "figureId": "table6-dynamics",
+      "body": [
+        "After the 2006 election, the local deposit effect attenuates sharply: among municipalities assigned to treatment, the year-2006 deviation from the pre-crackdown effect is negative and significant, and the effect never recovers through 2010. Yet cartel activity itself shows no discernible drop — production volume did not decline. Where did the missing liquidity go?",
+        "Across the border. After 2006, deposits in U.S. bank branches decline in distance from the Mexican border (−0.068 log points per unit of distance, significant at the 1% level) — a gradient that simply did not exist before the crackdown, and that fades after 2012, when a government perceived as more lenient toward organized crime was voted in. And the surge was not free for the banks that absorbed it: border-county deposit volume predicts regulatory enforcement actions at the bank level after 2006."
+      ]
+    },
+    {
+      "id": "mechanisms",
+      "navLabel": "Mechanism",
+      "eyebrow": "THE MECHANISM",
+      "title": "Finance Follows Crime",
+      "layout": "figure-below",
+      "figureId": "mechanism-map",
+      "body": [
+        "The pieces assemble into a single mechanism: cartel entry generates a local liquidity windfall that banks accommodate — expanding branch networks while contracting credit. Regulatory tightening in one jurisdiction does not eliminate the flows; it redirects them toward the neighboring banking system, where the associated compliance risk eventually materializes as enforcement actions.",
+        "This is regulatory arbitrage in its starkest form: not banks shopping for charters, but illicit liquidity shopping for banking systems."
+      ]
+    },
+    {
+      "id": "impact",
+      "navLabel": "Implications",
+      "title": "Regulation Ends at the Border",
+      "tone": "inverse",
+      "layout": "prose",
+      "body": [
+        "The evidence reads as 'finance follows crime' in weak institutional environments: banks in such settings absorb illicit liquidity, and national regulation alone cannot insulate them. A crackdown that leaves the underlying criminal enterprise intact does not shrink its finances — it exports them.",
+        "For policymakers, the implication is structural. Anti-money-laundering regulation is only as strong as its weakest neighboring jurisdiction, and absent transnational coordination, cross-border liquidity flows will keep undermining it."
+      ],
+      "quote": {
+        "text": "Absent transnational policy coordination, regulatory arbitrage via cross-border liquidity flows undermines banking regulation.",
+        "author": "— Aldama-Navarrete (2021)"
+      }
+    }
+  ],
+  "figures": [
+    {
+      "kind": "static",
+      "id": "fig1-map",
+      "src": "fig1-cartel-expansion.png",
+      "alt": "Four maps of Mexico in 1995, 2000, 2005, and 2010, with municipalities shaded dark where at least one drug cartel is active, showing cartel activity spreading across the country over time.",
+      "caption": "Geographic expansion of drug-cartel activity in Mexico, 1995–2010. Darkly shaded municipios have at least one active cartel; light shading signifies no data available.",
+      "credit": "Source: Aldama-Navarrete (2021), Figure 1; underlying data from Coscia & Ríos (2012)."
+    },
+    {
+      "kind": "interactive",
+      "id": "table2-deposits",
+      "component": "coefficient-bar",
+      "title": "Cartel Entry and Local Bank Deposits",
+      "description": "Effect of cartel entry on ln(deposits) at the municipality level, 1995–2010 (Table 2, Panel A). All specifications include municipality and year fixed effects; standard errors clustered by municipality. The paper prints significance stars only; exact p-values shown here are computed from the printed coefficients and standard errors (two-sided normal).",
+      "props": {
+        "metricLabel": "Effect on ln(municipal bank deposits)",
+        "note": "N = 12,978 municipality-years (9,038 with controls); 2,379 municipalities. Column (3) adds a continuous cartel-count regressor, whose own coefficient is small and insignificant (−0.016, SE 0.070).",
+        "categories": [
+          { "id": "baseline", "label": "Baseline (FE only)" },
+          { "id": "controls", "label": "+ Municipal controls" },
+          { "id": "continuous", "label": "Binary + cartel count" }
+        ],
+        "series": [
+          {
+            "id": "treated",
+            "label": "Cartel entry (Treated)",
+            "values": {
+              "baseline": { "est": 0.287, "p": 0.0011 },
+              "controls": { "est": 0.342, "p": 0.0003 },
+              "continuous": { "est": 0.311, "p": 0.009 }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "static",
+      "id": "fig3-event-time",
+      "src": "fig3-event-time.png",
+      "alt": "Two event-study panels showing estimated coefficients with confidence-interval whiskers over event years minus four to plus four around first cartel entry: total deposits in the top panel and active bank branches in the bottom panel, both flat before entry and rising sharply afterward.",
+      "caption": "Treatment effects in event time, from four years before to four years after first local cartel entry. Top: total deposits (Panel A). Bottom: active bank branches (Panel B). Estimated on the treatment group; the omitted category is more than five years before first treatment.",
+      "credit": "Source: Aldama-Navarrete (2021), Figure 3."
+    },
+    {
+      "kind": "interactive",
+      "id": "table6-dynamics",
+      "component": "event-study-explorer",
+      "title": "The Deposit Effect After the 2006 Crackdown",
+      "description": "Assigned-to-treatment estimates of the cartel-entry effect on ln(deposits), year by year after the 2006 election (Table 6, column 2). Bars show deviations from the pre-crackdown average effect (Treated = 0.194, p<0.01, omitted). The paper prints coefficients and standard errors; the 95% confidence intervals shown here are computed as ±1.96×SE from the printed standard errors.",
+      "props": {
+        "xLabel": "Year",
+        "yLabel": "Deviation of ln(deposits) effect",
+        "referenceLabel": "Pre-crackdown average effect (omitted)",
+        "points": [
+          { "t": 2005, "label": "≤2005", "coef": 0, "lo": 0, "hi": 0, "isReference": true },
+          { "t": 2006, "coef": -0.179, "lo": -0.301, "hi": -0.057 },
+          { "t": 2007, "coef": -0.008, "lo": -0.239, "hi": 0.223 },
+          { "t": 2008, "coef": -0.185, "lo": -0.597, "hi": 0.227 },
+          { "t": 2009, "coef": -0.12, "lo": -0.632, "hi": 0.392 },
+          { "t": 2010, "coef": 0.173, "lo": -0.431, "hi": 0.777 }
+        ],
+        "note": "N = 6,284 municipality-years; 717 municipalities assigned to treatment. Municipality and year fixed effects; standard errors clustered by municipality."
+      }
+    },
+    {
+      "kind": "diagram",
+      "id": "mechanism-map",
+      "title": "How Illicit Liquidity Moves",
+      "description": "Cartel entry reshapes local banking; a national crackdown redirects the flows across the border, where the risk resurfaces as enforcement actions.",
+      "spec": {
+        "nodes": [
+          { "id": "crackdown", "label": "2006 'law-and-order' crackdown", "type": "moderator", "column": 0, "row": 0, "note": "Election + AML restrictions in 2008, 2010" },
+          { "id": "cartel", "label": "Cartel entry into municipality", "type": "driver", "column": 0, "row": 1 },
+          { "id": "deposits", "label": "Local deposits surge", "type": "mechanism", "column": 1, "row": 0 },
+          { "id": "branches", "label": "Branch networks expand", "type": "mechanism", "column": 1, "row": 1 },
+          { "id": "lending", "label": "Local lending contracts", "type": "mechanism", "column": 1, "row": 2 },
+          { "id": "border", "label": "Deposits shift to U.S. border branches", "type": "outcome", "column": 2, "row": 0, "note": "Distance-to-border gradient appears only post-2006" },
+          { "id": "enforcement", "label": "Bank enforcement actions ↑", "type": "outcome", "column": 2, "row": 2 }
+        ],
+        "edges": [
+          { "id": "e1", "from": "cartel", "to": "deposits", "sign": "positive", "label": "liquidity windfall" },
+          { "id": "e2", "from": "cartel", "to": "branches", "sign": "positive", "label": "networks grow" },
+          { "id": "e3", "from": "cartel", "to": "lending", "sign": "negative", "label": "credit contracts" },
+          { "id": "e4", "from": "crackdown", "to": "deposits", "sign": "negative", "style": "dashed", "label": "attenuates" },
+          { "id": "e5", "from": "deposits", "to": "border", "sign": "positive", "label": "flows re-route", "labelSide": "above" },
+          { "id": "e6", "from": "border", "to": "enforcement", "sign": "positive", "label": "risk materializes" }
+        ],
+        "layout": { "columns": 3 }
+      }
+    }
+  ],
+  "authors": {
+    "eyebrow": "AUTHOR",
+    "heading": "About the Author",
+    "subheading": "Quantitative Supervision & Research, Federal Reserve Bank of Richmond",
+    "list": [
+      { "name": "David Aldama-Navarrete", "role": "Federal Reserve Bank of Richmond" }
+    ],
+    "footnote": "With thanks to the advisory committee — Phil Strahan, Edie Hotchkiss, and Nadya Malenko — and to seminar participants at the AEA meetings, Boston College, Banco de México, and other venues for valuable comments."
+  },
+  "footer": {
+    "blurb": "Working paper, March 2021 (SSRN 3811752). The views expressed herein are those of the author, and do not necessarily reflect those of the Federal Reserve Bank of Richmond, the Federal Reserve Board, or the Federal Reserve System at large.",
+    "tagline": "Built with paperViz."
+  }
+}

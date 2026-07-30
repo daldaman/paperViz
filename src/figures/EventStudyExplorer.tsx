@@ -282,10 +282,13 @@ export const EventStudyExplorer: React.FC<EventStudyExplorerProps> = ({
                     strokeWidth={2}
                   />
                   {isRef && (
+                    // A centered annotation clips off-chart when the reference
+                    // period is the first/last point, so anchor it away from
+                    // the nearer plot edge instead.
                     <text
-                      x={p.x}
+                      x={p.x < PLOT_W / 3 ? p.x + MARKER_R + 4 : p.x > (2 * PLOT_W) / 3 ? p.x - MARKER_R - 4 : p.x}
                       y={p.yCoef - MARKER_R - 8}
-                      textAnchor="middle"
+                      textAnchor={p.x < PLOT_W / 3 ? 'start' : p.x > (2 * PLOT_W) / 3 ? 'end' : 'middle'}
                       className="fill-theme-muted"
                       fontSize={10}
                       fontStyle="italic"
