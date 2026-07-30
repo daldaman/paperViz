@@ -109,5 +109,6 @@ Condensed from `.claude/plans/compressed-frolicking-feigenbaum.md`. Each phase s
 - [x] `papers/dark-banking.json`: 7 sections, 5 figures (coefficient-bar Table 2A, static Fig 1 + Fig 3, event-study-explorer Table 6 col 2 w/ disclosed derived CIs, concept map), Fed disclaimer footer
 - [x] `EventStudyExplorer`: edge-aware reference-period annotation (leftmost reference clipped off-chart)
 - [x] Browser-verified all sections/figures in gold-cream + cosmic-slate, gallery (3 cards), embed mode; typecheck + build clean
-- [ ] Deploy (push pending David's confirmation) + live verification
-- [ ] Google Sites: new hub page, By-URL embed, theme chosen from live screenshots with David's OK before publish
+- [x] Maps exhibit shrunk to near-native width via new optional `StaticFigureSchema.displayWidth` (280px; David approved the look and chose the light/default theme for the embed)
+- [x] Deployed (`25c7f07` + `9ae75bc` pushed; Actions run succeeded); live-verified full page + embed mode
+- [x] Google Sites: new "Dark Banking Interactive" full-page-embed page (hidden from navigation, matching WFH Interactive), published and live-verified at sites.google.com/view/davidaldama/dark-banking-interactive
