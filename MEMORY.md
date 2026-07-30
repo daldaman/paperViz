@@ -38,7 +38,7 @@ customizer (schema-generic form, JSON import/export,
         (static assets resolved via withBase())
 ```
 
-Two papers ship live: `alphaqubit` (demo/regression baseline) and `wfh-bank-efficiency` (pilot, real research content). `src/paperData.ts` and the old monolithic `App.tsx` are gone — everything renders from `PaperContent` read through the registry/schema stack above.
+Three papers ship live: `alphaqubit` (demo/regression baseline), `wfh-bank-efficiency` (pilot, real research content), and `dark-banking` (David's solo paper, onboarded 2026-07-30). `src/paperData.ts` and the old monolithic `App.tsx` are gone — everything renders from `PaperContent` read through the registry/schema stack above. Both real papers are embedded in David's Google Sites hub as hidden "Full page embed" pages (`/wfh-interactive`, `/dark-banking-interactive`).
 
 ## Key decisions
 
@@ -63,12 +63,16 @@ Two papers ship live: `alphaqubit` (demo/regression baseline) and `wfh-bank-effi
 - **[2026-07-30] The printed Table 2 of the 2021 draft has a typo: Panels B/C print identical coefficient blocks with swapped dependent-variable headers.** David chose a deposits-only coefficient exhibit (Panel A is unambiguous) with branches/lending described qualitatively in prose — never attribute the ambiguous printed B/C numbers. If a corrected draft or replication output surfaces, the exhibit can be extended to all three outcomes.
 - **[2026-07-30] Derived-numbers precedent (David-approved): arithmetic transformations of printed values are policy-compliant when disclosed in the figure description.** dark-banking computes 95% CIs as ±1.96×SE from Table 6's printed SEs and exact p-values from printed est/SE (two-sided normal, Table 2 prints stars only); both figure descriptions state the derivation. Eyeballing values off figure images remains forbidden.
 - **[2026-07-30] Google Sites embed pattern upgraded: use the "Full page embed" PAGE TYPE, not an embed block on a regular page.** In the Sites editor's Pages panel, the + speed dial offers "Full page embed" — the exhibit then fills the page edge-to-edge (how `dark-banking-interactive` was built). The WFH page was rebuilt this way on 2026-07-30: Sites cannot convert a page type, so the old page was deleted and recreated with the same name and an explicit custom path (`wfh-interactive`, set under Advanced in the new-page dialog) so its published URL never changed; both changes shipped in one publish, and the exact original embed URL (incl. `theme=gold-cream` + `font-heading=Playfair+Display&font-body=Inter` params) was reused. Both exhibit pages are hidden from navigation. Also: a just-published Sites page can 404 for a minute — propagation lag, not an error.
+- **[2026-07-30] `StaticFigureSchema` gained optional `displayWidth` (px cap on rendered width, lightbox unaffected)** after the cartel-expansion maps (240px native) looked blurry stretched to full card width. Rule of thumb: display low-resolution cribs at or near native pixel width; David approved 280px for the maps and prefers the light (default gold-cream) theme for hub embeds.
 - **[2026-07-30] `EventStudyExplorer` reference-period annotation is now edge-aware** — it anchors start/end instead of middle when the reference point sits in the outer thirds of the plot, because dark-banking's reference ("≤2005") is the leftmost point and the centered label clipped off-chart.
 
 ## Open threads
 
 - [ ] **Need replication-output coefficients for the pilot's Fig 1 (event study — coefficients + CI bounds per horizon, 4 panels) from David.** Numbers policy: never eyeball values off a published figure/table image for a Fed paper. Once available, build the `event-study-explorer` figure for `wfh-bank-efficiency.json` to replace/supplement the static crib.
-- [ ] Possible next papers to onboard onto the engine once identified (no candidates queued yet).
+- [ ] Possible next papers to onboard onto the engine once identified (no candidates queued; `dark-banking` completed 2026-07-30 — use its todo.md checklist section as the onboarding playbook).
+- [ ] Dark Banking hub page is live but not yet linked from the Research page's paper entry — David's call on where/whether to add the link.
+- [ ] If corrected Table 2 Panel B/C values surface (fixed draft or replication files), extend `dark-banking`'s coefficient-bar from deposits-only to all three outcomes (branches, lending).
+- [ ] The new `dark-banking-interactive` Sites page sits at the top level of the page tree while the others nest under Home — invisible to visitors (hidden from nav), one drag in the Pages panel if David wants it tidied.
 - [ ] Optional hardening: `EmbedTab.tsx`'s copy buttons don't await `navigator.clipboard.writeText`, so a denied clipboard write still flashes "Copied" while the clipboard holds stale content — a candidate cause of the 2026-07-22 embed-paste confusion. Low priority now that the hub embed is live.
 - [ ] Throwaway "Untitled site" in David's Google Sites account (created 2026-07-21 while debugging the embed) can be deleted whenever — David's call, never delete it unprompted.
 
