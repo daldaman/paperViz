@@ -1,7 +1,7 @@
 # paperViz — STATUS
 
 **Phase:** active (deployed + embedded)
-**Last updated:** 2026-07-30
+**Last updated:** 2026-08-18 (no content change since 07-30 — dependabot dev-dependency patch only, PR #7; pvz#4 closed as duplicate of #6, the coefficients blocker)
 
 ## Current state
 - Engine is live at `https://daldaman.github.io/paperViz/` (gallery), deployed via GitHub Actions (`.github/workflows/deploy.yml`: npm ci → typecheck → build → deploy) from the public repo `daldaman/paperViz`. Three papers ship: `?paper=alphaqubit` (demo/regression baseline), `?paper=wfh-bank-efficiency` (pilot: "Cheaper to Run, Harder to Earn", Aldama-Navarrete/Alexander/Curti, SSRN 6973859), and `?paper=dark-banking` ("Dark Banking? Banks and Illicit Deposit Flows", Aldama-Navarrete solo, SSRN 3811752 — onboarded and embedded in the Sites hub 2026-07-30).
